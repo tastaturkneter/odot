@@ -495,7 +495,8 @@ export function Sidebar() {
 
   return (
     <aside className="flex h-full w-60 flex-col border-r border-sidebar-border bg-sidebar-background">
-      <div className="flex items-center px-4 py-3">
+      <div className="flex items-center gap-2 px-4 py-3">
+        <img src="/icon.svg" alt="odot" className="h-6 w-6 rounded" />
         <h1 className="text-lg font-semibold text-sidebar-foreground">odot</h1>
       </div>
 
