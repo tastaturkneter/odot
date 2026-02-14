@@ -1,0 +1,23 @@
+services:
+  odot:
+    image: ghcr.io/effem/odot:latest
+    container_name: odot
+    ports:
+      - "3000:80"
+    environment:
+      # Sync-URL aus Sicht des Browsers
+      # Lokal: ws://localhost:4000
+      # Produktion: wss://sync.deinedomain.de
+      SYNC_URL: "ws://localhost:4000"
+    restart: unless-stopped
+    depends_on:
+      - relay
+
+  relay:
+    image: evoluhq/relay:latest
+    container_name: odot-relay
+    ports:
+      - "4000:4000"
+    volumes:
+      - ./relay-data:/app/data
+    restart: unless-stopped

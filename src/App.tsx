@@ -1,0 +1,32 @@
+import { useState } from "react";
+import { ViewContext } from "@/hooks/useActiveView";
+import { AppShell } from "@/components/layout/AppShell";
+import { Toaster } from "@/components/ui/sonner";
+import { useViewRouter } from "@/hooks/useViewRouter";
+
+function App() {
+  const [activeView, setActiveView] = useViewRouter();
+  const [newModalOpen, setNewModalOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  return (
+    <ViewContext
+      value={{
+        activeView,
+        setActiveView,
+        newModalOpen,
+        setNewModalOpen,
+        searchOpen,
+        setSearchOpen,
+        sidebarOpen,
+        setSidebarOpen,
+      }}
+    >
+      <AppShell />
+      <Toaster />
+    </ViewContext>
+  );
+}
+
+export default App;
