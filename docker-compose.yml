@@ -1,6 +1,6 @@
 services:
   odot:
-    image: ghcr.io/effem/odot:latest
+    image: ghcr.io/tastaturkneter/odot:latest
     container_name: odot
     ports:
       - "3000:80"

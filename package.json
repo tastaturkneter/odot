@@ -8,8 +8,8 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "docker:build": "docker build -t ghcr.io/effem/odot:$(node -p \"require('./package.json').version\") -t ghcr.io/effem/odot:latest .",
-    "docker:push": "docker push ghcr.io/effem/odot:$(node -p \"require('./package.json').version\") && docker push ghcr.io/effem/odot:latest",
+    "docker:build": "docker build -t ghcr.io/tastaturkneter/odot:$(node -p \"require('./package.json').version\") -t ghcr.io/tastaturkneter/odot:latest .",
+    "docker:push": "docker push ghcr.io/tastaturkneter/odot:$(node -p \"require('./package.json').version\") && docker push ghcr.io/tastaturkneter/odot:latest",
     "release:patch": "npm version patch && npm run docker:build && npm run docker:push",
     "release:minor": "npm version minor && npm run docker:build && npm run docker:push",
     "release:major": "npm version major && npm run docker:build && npm run docker:push"
