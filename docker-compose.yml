@@ -9,6 +9,7 @@ services:
       # Lokal: ws://localhost:4000
       # Produktion: wss://sync.deinedomain.de
       SYNC_URL: "ws://localhost:4000"
+      # LOCALE: "en"  # Interface language (en, de, ...)
     restart: unless-stopped
     depends_on:
       - relay

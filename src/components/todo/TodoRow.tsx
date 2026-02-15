@@ -20,6 +20,7 @@ import { DeadlinePicker } from "@/components/shared/DeadlinePicker";
 import { ProjectPicker } from "@/components/shared/ProjectPicker";
 import { TagPicker } from "@/components/shared/TagPicker";
 import { useTodoActions } from "@/hooks/useTodoActions";
+import { useTranslation } from "@/hooks/useTranslation";
 import { useQuery } from "@evolu/react";
 import { allProjects, allTags, allTodoTags, allChecklistItems } from "@/db/queries";
 import { ProgressCircle } from "@/components/shared/ProgressCircle";
@@ -55,6 +56,7 @@ export function TodoRow({
   onNativeDragStart,
 }: TodoRowProps) {
   const { updateTodo } = useTodoActions();
+  const t = useTranslation();
   const projects = useQuery(allProjects);
   const tags = useQuery(allTags);
   const todoTags = useQuery(allTodoTags);
@@ -163,7 +165,7 @@ export function TodoRow({
         {...(dragListeners as React.HTMLAttributes<HTMLButtonElement>)}
         className="absolute -left-5 top-2.5 cursor-grab touch-none text-muted-foreground/40 opacity-40 md:opacity-0 transition-opacity md:group-hover:opacity-100 active:cursor-grabbing"
         tabIndex={-1}
-        aria-label="Drag to reorder"
+        aria-label={t("todo.dragToReorder")}
       >
         <GripVertical className="h-4 w-4" />
       </button>
@@ -203,13 +205,13 @@ export function TodoRow({
             {isSomeday && !hasWhen && (
               <span className="flex items-center gap-1 text-xs text-muted-foreground">
                 <Clock className="h-3 w-3" />
-                Someday
+                {t("todo.someday")}
               </span>
             )}
             {hasDeadline && (
               <span className="flex items-center gap-1 text-xs text-orange-500">
                 <CalendarClock className="h-3 w-3" />
-                Due {formatDateShort(todo.deadline!)}
+                {t("todo.due", { date: formatDateShort(todo.deadline!) })}
               </span>
             )}
             {project && (
@@ -266,7 +268,7 @@ export function TodoRow({
             <button
               ref={whenRef}
               className="rounded p-1 text-muted-foreground hover:bg-accent hover:text-foreground"
-              title="Schedule"
+              title={t("todo.schedule")}
               onClick={(e) => e.stopPropagation()}
             >
               <Sun className="h-3.5 w-3.5" />
@@ -279,7 +281,7 @@ export function TodoRow({
             <button
               ref={deadlineRef}
               className="rounded p-1 text-muted-foreground hover:bg-accent hover:text-foreground"
-              title="Deadline"
+              title={t("todo.deadline")}
               onClick={(e) => e.stopPropagation()}
             >
               <CalendarClock className="h-3.5 w-3.5" />
@@ -292,7 +294,7 @@ export function TodoRow({
             <button
               ref={projectRef}
               className="rounded p-1 text-muted-foreground hover:bg-accent hover:text-foreground"
-              title="Project"
+              title={t("todo.project")}
               onClick={(e) => e.stopPropagation()}
             >
               <FolderOpen className="h-3.5 w-3.5" />
@@ -302,7 +304,7 @@ export function TodoRow({
             <button
               ref={tagRef}
               className="rounded p-1 text-muted-foreground hover:bg-accent hover:text-foreground"
-              title="Tags"
+              title={t("todo.tags")}
               onClick={(e) => e.stopPropagation()}
             >
               <Tag className="h-3.5 w-3.5" />
@@ -323,7 +325,7 @@ export function TodoRow({
         >
           <button
             className="rounded p-1 text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
-            title="Delete"
+            title={t("todo.delete")}
             onClick={(e) => {
               e.stopPropagation();
               onDelete(todo.id);

@@ -6,6 +6,7 @@ import { Plus, X } from "lucide-react";
 import { useQuery } from "@evolu/react";
 import { allChecklistItems } from "@/db/queries";
 import { useTodoActions } from "@/hooks/useTodoActions";
+import { useTranslation } from "@/hooks/useTranslation";
 
 interface ChecklistEditorProps {
   todoId: string;
@@ -13,6 +14,7 @@ interface ChecklistEditorProps {
 }
 
 export function ChecklistEditor({ todoId, onAllCompleted }: ChecklistEditorProps) {
+  const t = useTranslation();
   const items = useQuery(allChecklistItems);
   const { createChecklistItem, updateChecklistItem, deleteChecklistItem } =
     useTodoActions();
@@ -124,7 +126,7 @@ export function ChecklistEditor({ todoId, onAllCompleted }: ChecklistEditorProps
         <Plus className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
         <Input
           ref={newInputRef}
-          placeholder="Add item..."
+          placeholder={t("checklist.addItem")}
           value={newText}
           onChange={(e) => setNewText(e.target.value)}
           onKeyDown={(e) => {

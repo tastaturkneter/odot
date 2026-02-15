@@ -27,6 +27,7 @@ import { useOnlineStatus } from "@/hooks/useOnlineStatus";
 import { getSyncIndicator } from "@/components/shared/SyncStatus";
 import { SidebarItem } from "./SidebarItem";
 import { SidebarInlineInput } from "./SidebarInlineInput";
+import { useTranslation } from "@/hooks/useTranslation";
 import { AccountDialog } from "@/components/shared/AccountDialog";
 import { SettingsDialog } from "@/components/shared/SettingsDialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -135,6 +136,7 @@ export function Sidebar() {
   const evoluError = useEvoluError();
   const isOnline = useOnlineStatus();
   const syncIndicator = getSyncIndicator(evoluError, isOnline);
+  const t = useTranslation();
   const [accountOpen, setAccountOpen] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const todos = useQuery(allTodos);
@@ -505,7 +507,7 @@ export function Sidebar() {
           <div {...viewDropHandlers("inbox")}>
             <SidebarItem
               icon={Inbox}
-              label="Inbox"
+              label={t("sidebar.inbox")}
               color="#3b82f6"
               count={inboxTodos.length}
               alert={overdue(inboxTodos)}
@@ -517,7 +519,7 @@ export function Sidebar() {
           <div {...viewDropHandlers("today")}>
             <SidebarItem
               icon={Sun}
-              label="Today"
+              label={t("sidebar.today")}
               color="#f59e0b"
               count={todayTodos.length}
               alert={overdue(todayTodos)}
@@ -529,7 +531,7 @@ export function Sidebar() {
           <div {...viewDropHandlers("anytime")}>
             <SidebarItem
               icon={Repeat}
-              label="Anytime"
+              label={t("sidebar.anytime")}
               color="#8b5cf6"
               isActive={isActive({ kind: "anytime" })}
               isDragOver={dragOverViewId === "anytime"}
@@ -539,7 +541,7 @@ export function Sidebar() {
           <div {...viewDropHandlers("upcoming")}>
             <SidebarItem
               icon={Calendar}
-              label="Upcoming"
+              label={t("sidebar.upcoming")}
               color="#ef4444"
               isActive={isActive({ kind: "upcoming" })}
               isDragOver={dragOverViewId === "upcoming"}
@@ -549,7 +551,7 @@ export function Sidebar() {
           <div {...viewDropHandlers("someday")}>
             <SidebarItem
               icon={Clock}
-              label="Someday"
+              label={t("sidebar.someday")}
               color="#a78bfa"
               isActive={isActive({ kind: "someday" })}
               isDragOver={dragOverViewId === "someday"}
@@ -558,14 +560,14 @@ export function Sidebar() {
           </div>
           <SidebarItem
             icon={BookOpen}
-            label="Logbook"
+            label={t("sidebar.logbook")}
             color="#10b981"
             isActive={isActive({ kind: "logbook" })}
             onClick={() => setActiveView({ kind: "logbook" })}
           />
           <SidebarItem
             icon={Trash2}
-            label="Trash"
+            label={t("sidebar.trash")}
             color="#6b7280"
             count={trashedTodos.length}
             isActive={isActive({ kind: "trash" })}
@@ -578,7 +580,7 @@ export function Sidebar() {
         {/* Workspace section */}
         <div className="mb-1 px-2">
           <span className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-            Workspace
+            {t("sidebar.workspace")}
           </span>
         </div>
         <DndContext
@@ -620,7 +622,7 @@ export function Sidebar() {
                         <button
                           className="shrink-0 rounded p-0.5 text-muted-foreground hover:text-sidebar-foreground"
                           onClick={() => toggleArea(area.id)}
-                          aria-label={isCollapsed ? "Expand" : "Collapse"}
+                          aria-label={isCollapsed ? t("sidebar.expand") : t("sidebar.collapse")}
                         >
                           {isCollapsed ? (
                             <ChevronRight className="h-3.5 w-3.5" />
@@ -643,7 +645,7 @@ export function Sidebar() {
                         </button>
                         <button
                           className="shrink-0 rounded p-0.5 text-muted-foreground hover:text-sidebar-foreground"
-                          aria-label="Add project to area"
+                          aria-label={t("sidebar.addProjectToArea")}
                           onClick={() => setAddingProjectInArea(area.id)}
                         >
                           <Plus className="h-3.5 w-3.5" />
@@ -709,7 +711,7 @@ export function Sidebar() {
                       {isLastChildOfArea && addingProjectInArea === item.parentAreaId && (
                         <div className="ml-4">
                           <SidebarInlineInput
-                            placeholder="Project name"
+                            placeholder={t("sidebar.projectNamePlaceholder")}
                             onSubmit={(name) =>
                               handleCreateProjectInArea(name, item.parentAreaId!)
                             }
@@ -726,7 +728,7 @@ export function Sidebar() {
               {addingProjectInArea && !flatItems.some((i) => i.kind === "project" && i.parentAreaId === addingProjectInArea) && (
                 <div className="ml-4">
                   <SidebarInlineInput
-                    placeholder="Project name"
+                    placeholder={t("sidebar.projectNamePlaceholder")}
                     onSubmit={(name) =>
                       handleCreateProjectInArea(name, addingProjectInArea)
                     }
@@ -737,7 +739,7 @@ export function Sidebar() {
 
               {areas.length === 0 && ungroupedProjects.length === 0 && !addingArea && !addingUngroupedProject && (
                 <p className="px-2 py-1 text-xs text-muted-foreground">
-                  No projects yet
+                  {t("sidebar.noProjectsYet")}
                 </p>
               )}
             </div>
@@ -745,14 +747,14 @@ export function Sidebar() {
         </DndContext>
         {addingArea && (
           <SidebarInlineInput
-            placeholder="Area name"
+            placeholder={t("sidebar.areaNamePlaceholder")}
             onSubmit={handleCreateArea}
             onCancel={() => setAddingArea(false)}
           />
         )}
         {addingUngroupedProject && ungroupedProjects.length === 0 && (
           <SidebarInlineInput
-            placeholder="Project name"
+            placeholder={t("sidebar.projectNamePlaceholder")}
             onSubmit={handleCreateUngroupedProject}
             onCancel={() => setAddingUngroupedProject(false)}
           />
@@ -764,7 +766,7 @@ export function Sidebar() {
                 className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
               >
                 <Plus className="h-3.5 w-3.5" />
-                <span>Add</span>
+                <span>{t("sidebar.add")}</span>
               </button>
             </PopoverTrigger>
             <PopoverContent align="start" className="w-40 p-1">
@@ -773,14 +775,14 @@ export function Sidebar() {
                 onClick={() => setAddingUngroupedProject(true)}
               >
                 <FolderOpen className="h-4 w-4" />
-                Project
+                {t("sidebar.project")}
               </button>
               <button
                 className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-sm transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
                 onClick={() => setAddingArea(true)}
               >
                 <Box className="h-4 w-4" style={{ color: "#06b6d4" }} />
-                Area
+                {t("sidebar.area")}
               </button>
             </PopoverContent>
           </Popover>
@@ -791,11 +793,11 @@ export function Sidebar() {
         {/* Tags section */}
         <div className="mb-1 flex items-center justify-between px-2">
           <span className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-            Tags
+            {t("sidebar.tags")}
           </span>
           <button
             className="rounded p-0.5 text-muted-foreground hover:text-sidebar-foreground"
-            aria-label="Add tag"
+            aria-label={t("sidebar.addTag")}
             onClick={() => setAddingTag(true)}
           >
             <Plus className="h-3.5 w-3.5" />
@@ -814,14 +816,14 @@ export function Sidebar() {
           ))}
           {addingTag && (
             <SidebarInlineInput
-              placeholder="Tag name"
+              placeholder={t("sidebar.tagNamePlaceholder")}
               onSubmit={handleCreateTag}
               onCancel={() => setAddingTag(false)}
             />
           )}
           {tags.length === 0 && !addingTag && (
             <p className="px-2 py-1 text-xs text-muted-foreground">
-              No tags yet
+              {t("sidebar.noTagsYet")}
             </p>
           )}
         </div>
@@ -831,10 +833,10 @@ export function Sidebar() {
         <button
           className="flex items-center gap-2 rounded px-2 py-1 text-xs text-muted-foreground hover:text-sidebar-foreground transition-colors"
           onClick={() => setAccountOpen(true)}
-          title="Account & Sync"
+          title={t("sidebar.accountAndSync")}
         >
           <User className="h-3.5 w-3.5" />
-          <span>Account</span>
+          <span>{t("sidebar.account")}</span>
         </button>
         <div className="flex items-center gap-1.5">
           <div
@@ -847,24 +849,24 @@ export function Sidebar() {
             }`}
             title={
               syncIndicator === "synced"
-                ? "Synced"
+                ? t("sidebar.synced")
                 : syncIndicator === "offline"
-                  ? "Offline"
-                  : "Sync error"
+                  ? t("sidebar.offline")
+                  : t("sidebar.syncError")
             }
           />
           <span className="text-[10px] text-muted-foreground">
             {syncIndicator === "synced"
-              ? "Synced"
+              ? t("sidebar.synced")
               : syncIndicator === "offline"
-                ? "Offline"
-                : "Error"}
+                ? t("sidebar.offline")
+                : t("sidebar.syncError")}
           </span>
         </div>
         <button
           className="rounded p-1 text-muted-foreground hover:text-sidebar-foreground transition-colors"
           onClick={() => setSettingsOpen(true)}
-          title="Settings"
+          title={t("sidebar.settings")}
         >
           <Settings className="h-3.5 w-3.5" />
         </button>

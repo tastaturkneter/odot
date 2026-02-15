@@ -9,6 +9,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
 import { dateToStr, strToDate } from "@/lib/dates";
+import { useTranslation } from "@/hooks/useTranslation";
 
 interface DeadlinePickerProps {
   value: string | null;
@@ -34,6 +35,7 @@ export function DeadlinePicker({
   children,
   modal,
 }: DeadlinePickerProps) {
+  const t = useTranslation();
   const [open, setOpen] = useState(false);
   const calendarRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLElement>(null);
@@ -90,7 +92,7 @@ export function DeadlinePicker({
             }}
           >
             <X className="mr-1 h-3.5 w-3.5" />
-            Clear deadline
+            {t("picker.clearDeadline")}
           </Button>
         </div>
       )}

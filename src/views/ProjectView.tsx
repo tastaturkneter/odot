@@ -39,6 +39,7 @@ import {
 import { KeyboardShortcutHandler } from "@/components/todo/KeyboardShortcutHandler";
 import { ProgressCircle } from "@/components/shared/ProgressCircle";
 import type { PickerType } from "@/components/todo/TodoRow";
+import { useTranslation } from "@/hooks/useTranslation";
 
 // A project item is either a todo or a heading
 type ProjectItem =
@@ -64,6 +65,7 @@ function SortableHeadingRow({
   onDelete: (id: string) => void;
   onUpdateTitle: (id: string, title: string) => void;
 }) {
+  const t = useTranslation();
   const {
     attributes,
     listeners,
@@ -139,7 +141,7 @@ function SortableHeadingRow({
 
         <button
           className="mr-1.5 rounded p-1 text-muted-foreground opacity-0 transition-opacity hover:bg-destructive/10 hover:text-destructive group-hover:opacity-100"
-          title="Delete heading"
+          title={t("view.deleteHeading")}
           onClick={(e) => {
             e.stopPropagation();
             onDelete(heading.id);
@@ -155,6 +157,7 @@ function SortableHeadingRow({
 // --- ProjectView ---
 
 export function ProjectView({ projectId }: { projectId: string }) {
+  const t = useTranslation();
   const { newModalOpen, setNewModalOpen, setActiveView } = useActiveView();
   const { deleteProject, updateProject: updateProjectFields } = useProjectActions();
   const { toggleComplete, deleteTodo, updateTodo } = useTodoActions();
@@ -417,11 +420,11 @@ export function ProjectView({ projectId }: { projectId: string }) {
           onClick={() => setNewModalOpen(true)}
         >
           <Plus className="mr-1 h-4 w-4" />
-          New
+          {t("view.new")}
         </Button>
         <Button size="sm" variant="ghost" onClick={handleAddHeading}>
           <Heading2 className="mr-1 h-4 w-4" />
-          Heading
+          {t("view.heading")}
         </Button>
         <Button
           size="sm"
@@ -430,7 +433,7 @@ export function ProjectView({ projectId }: { projectId: string }) {
             deleteProject(projectId);
             setActiveView({ kind: "inbox" });
           }}
-          title="Delete project"
+          title={t("view.deleteProject")}
         >
           <Trash2 className="h-4 w-4 text-muted-foreground hover:text-destructive" />
         </Button>
@@ -441,7 +444,7 @@ export function ProjectView({ projectId }: { projectId: string }) {
           value={projectNotes}
           onChange={(e: ChangeEvent<HTMLTextAreaElement>) => setProjectNotes(e.target.value)}
           onBlur={handleProjectNotesBlur}
-          placeholder="Notes..."
+          placeholder={t("todo.notesPlaceholder")}
           className="min-h-[2rem] resize-none border-none p-0 text-sm shadow-none focus-visible:ring-0"
         />
       </div>
@@ -450,7 +453,7 @@ export function ProjectView({ projectId }: { projectId: string }) {
         <KeyboardShortcutHandler />
         {items.length === 0 ? (
           <p className="py-8 text-center text-sm text-muted-foreground">
-            No todos in this project.
+            {t("view.projectEmpty")}
           </p>
         ) : (
           <DndContext
@@ -520,8 +523,8 @@ export function ProjectView({ projectId }: { projectId: string }) {
             onClick={() => setShowCompleted((v) => !v)}
           >
             {showCompleted
-              ? `Hide ${completedCount} logged ${completedCount === 1 ? "task" : "tasks"}`
-              : `Show ${completedCount} logged ${completedCount === 1 ? "task" : "tasks"}`}
+              ? t("view.hideLogged", { count: completedCount, taskWord: completedCount === 1 ? t("view.task") : t("view.tasks") })
+              : t("view.showLogged", { count: completedCount, taskWord: completedCount === 1 ? t("view.task") : t("view.tasks") })}
           </button>
           {showCompleted && (
             <div className="mt-3 space-y-0.5">

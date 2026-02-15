@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Plus, Eye, EyeOff, Calendar } from "lucide-react";
 import { useActiveView } from "@/hooks/useActiveView";
 import { useSettings } from "@/hooks/useSettings";
+import { useTranslation } from "@/hooks/useTranslation";
 import { cn } from "@/lib/utils";
 
 const RANGE_OPTIONS = [7, 14, 30] as const;
@@ -66,6 +67,7 @@ function emptyRangeLabel(from: string, to: string): string {
 }
 
 export function UpcomingView() {
+  const t = useTranslation();
   const { newModalOpen, setNewModalOpen } = useActiveView();
   const [showCompleted, setShowCompleted] = useState(false);
   const { get, set } = useSettings();
@@ -78,7 +80,7 @@ export function UpcomingView() {
 
   return (
     <div>
-      <ViewHeader title="Upcoming" icon={<Calendar className="h-6 w-6" style={{ color: "#ef4444" }} />}>
+      <ViewHeader title={t("sidebar.upcoming")} icon={<Calendar className="h-6 w-6" style={{ color: "#ef4444" }} />}>
         <div className="flex items-center gap-0.5 rounded-md border p-0.5">
           {RANGE_OPTIONS.map((days) => (
             <button
@@ -99,13 +101,13 @@ export function UpcomingView() {
           size="sm"
           variant="ghost"
           onClick={() => setShowCompleted((v) => !v)}
-          title={showCompleted ? "Hide completed" : "Show completed"}
+          title={showCompleted ? t("view.hideCompleted") : t("view.showCompleted")}
         >
           {showCompleted ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
         </Button>
         <Button size="sm" variant="ghost" onClick={() => setNewModalOpen(true)}>
           <Plus className="mr-1 h-4 w-4" />
-          New
+          {t("view.new")}
         </Button>
       </ViewHeader>
       <div className="space-y-1">

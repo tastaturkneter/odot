@@ -5,61 +5,64 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
+import { useTranslation } from "@/hooks/useTranslation";
 
 interface KeyboardShortcutsDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }
 
-const sections = [
-  {
-    title: "Navigation",
-    shortcuts: [
-      { keys: ["j", "\u2193"], description: "Move down" },
-      { keys: ["k", "\u2191"], description: "Move up" },
-      { keys: ["Enter"], description: "Expand / collapse" },
-      { keys: ["Esc"], description: "Collapse / blur" },
-      { keys: ["1\u20135"], description: "Switch view" },
-    ],
-  },
-  {
-    title: "Actions",
-    shortcuts: [
-      { keys: ["Space"], description: "Toggle complete" },
-      { keys: ["n"], description: "New todo" },
-      { keys: ["\u232b"], description: "Delete" },
-      { keys: ["s"], description: "Mark as Someday" },
-    ],
-  },
-  {
-    title: "Pickers",
-    shortcuts: [
-      { keys: ["d"], description: "Schedule date" },
-      { keys: ["l"], description: "Deadline" },
-      { keys: ["p"], description: "Project" },
-      { keys: ["t"], description: "Tag" },
-    ],
-  },
-  {
-    title: "Global",
-    shortcuts: [
-      { keys: ["\u2318K"], description: "Command palette" },
-      { keys: ["?"], description: "This help" },
-    ],
-  },
-];
-
 export function KeyboardShortcutsDialog({
   open,
   onOpenChange,
 }: KeyboardShortcutsDialogProps) {
+  const t = useTranslation();
+
+  const sections = [
+    {
+      title: t("shortcuts.navigation"),
+      shortcuts: [
+        { keys: ["j", "\u2193"], description: t("shortcuts.moveDown") },
+        { keys: ["k", "\u2191"], description: t("shortcuts.moveUp") },
+        { keys: ["Enter"], description: t("shortcuts.expandCollapse") },
+        { keys: ["Esc"], description: t("shortcuts.collapseBlur") },
+        { keys: ["1\u20135"], description: t("shortcuts.switchView") },
+      ],
+    },
+    {
+      title: t("shortcuts.actions"),
+      shortcuts: [
+        { keys: ["Space"], description: t("shortcuts.toggleComplete") },
+        { keys: ["n"], description: t("shortcuts.newTodo") },
+        { keys: ["\u232B"], description: t("shortcuts.delete") },
+        { keys: ["s"], description: t("shortcuts.markSomeday") },
+      ],
+    },
+    {
+      title: t("shortcuts.pickers"),
+      shortcuts: [
+        { keys: ["d"], description: t("shortcuts.scheduleDate") },
+        { keys: ["l"], description: t("shortcuts.deadlineShortcut") },
+        { keys: ["p"], description: t("shortcuts.projectShortcut") },
+        { keys: ["t"], description: t("shortcuts.tagShortcut") },
+      ],
+    },
+    {
+      title: t("shortcuts.global"),
+      shortcuts: [
+        { keys: ["\u2318K"], description: t("shortcuts.commandPalette") },
+        { keys: ["?"], description: t("shortcuts.thisHelp") },
+      ],
+    },
+  ];
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-sm">
         <DialogHeader>
-          <DialogTitle>Keyboard Shortcuts</DialogTitle>
+          <DialogTitle>{t("shortcuts.title")}</DialogTitle>
           <DialogDescription>
-            Quick keys to navigate and manage your tasks.
+            {t("shortcuts.description")}
           </DialogDescription>
         </DialogHeader>
 

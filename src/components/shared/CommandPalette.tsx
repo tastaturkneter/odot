@@ -5,6 +5,7 @@ import { useActiveView } from "@/hooks/useActiveView";
 import { useTodoActions } from "@/hooks/useTodoActions";
 import { useSettings } from "@/hooks/useSettings";
 import { useTagActions } from "@/hooks/useTagActions";
+import { useTranslation } from "@/hooks/useTranslation";
 import { buildTodoTagMap } from "@/lib/filters";
 import { parseQuickAdd } from "@/lib/quickAddParser";
 import { formatDateShort, todayStr } from "@/lib/dates";
@@ -51,26 +52,6 @@ interface AutocompleteContext {
   endIndex: number;
 }
 
-const SCHEDULE_OPTIONS = [
-  { label: "Today", keyword: "today" },
-  { label: "Tomorrow", keyword: "tomorrow" },
-  { label: "Weekend", keyword: "weekend" },
-  { label: "Next Week", keyword: "nextweek" },
-  { label: "Someday", keyword: "someday" },
-];
-
-const DEADLINE_OPTIONS = [
-  { label: "Today", keyword: "today" },
-  { label: "Tomorrow", keyword: "tomorrow" },
-  { label: "Monday", keyword: "monday" },
-  { label: "Tuesday", keyword: "tuesday" },
-  { label: "Wednesday", keyword: "wednesday" },
-  { label: "Thursday", keyword: "thursday" },
-  { label: "Friday", keyword: "friday" },
-  { label: "Saturday", keyword: "saturday" },
-  { label: "Sunday", keyword: "sunday" },
-];
-
 function getAutocompleteContext(
   value: string,
   cursorPos: number,
@@ -107,6 +88,7 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
   const { createTodo, updateTodo } = useTodoActions();
   const { addTagToTodo } = useTagActions();
   const { get: getSetting } = useSettings();
+  const t = useTranslation();
   const dateFormat = getSetting("dateFormat") === "month-first" ? "month-first" : "day-first" as const;
 
   const todos = useQuery(allTodos);
@@ -118,6 +100,26 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
   const [inputValue, setInputValue] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
   const [cursorPos, setCursorPos] = useState(0);
+
+  const SCHEDULE_OPTIONS = useMemo(() => [
+    { label: t("schedule.today"), keyword: "today" },
+    { label: t("schedule.tomorrow"), keyword: "tomorrow" },
+    { label: t("schedule.weekend"), keyword: "weekend" },
+    { label: t("schedule.nextWeek"), keyword: "nextweek" },
+    { label: t("schedule.someday"), keyword: "someday" },
+  ], [t]);
+
+  const DEADLINE_OPTIONS = useMemo(() => [
+    { label: t("deadline.today"), keyword: "today" },
+    { label: t("deadline.tomorrow"), keyword: "tomorrow" },
+    { label: t("deadline.monday"), keyword: "monday" },
+    { label: t("deadline.tuesday"), keyword: "tuesday" },
+    { label: t("deadline.wednesday"), keyword: "wednesday" },
+    { label: t("deadline.thursday"), keyword: "thursday" },
+    { label: t("deadline.friday"), keyword: "friday" },
+    { label: t("deadline.saturday"), keyword: "saturday" },
+    { label: t("deadline.sunday"), keyword: "sunday" },
+  ], [t]);
 
   const activeTodos = useMemo(
     () => [...todos].filter((t) => t.isCompleted !== 1),
@@ -162,7 +164,7 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
       );
     }
     return [];
-  }, [acContext]);
+  }, [acContext, SCHEDULE_OPTIONS, DEADLINE_OPTIONS]);
 
   const parsed = useMemo(() => {
     if (!inputValue.trim()) return null;
@@ -237,15 +239,15 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
     }
 
     const locationLabel = parsed.projectId
-      ? parsed.projectName ?? "Inbox"
+      ? parsed.projectName ?? t("sidebar.inbox")
       : parsed.whenDate === todayStr()
-        ? "Today"
+        ? t("sidebar.today")
         : parsed.whenDate
-          ? "Upcoming"
+          ? t("sidebar.upcoming")
           : parsed.whenSomeday
-            ? "Someday"
-            : "Inbox";
-    toast(`Todo created in ${locationLabel}`);
+            ? t("sidebar.someday")
+            : t("sidebar.inbox");
+    toast(t("commandPalette.todoCreatedIn", { location: locationLabel }));
 
     setInputValue("");
     setCursorPos(0);
@@ -340,9 +342,9 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogHeader className="sr-only">
-        <DialogTitle>Command Palette</DialogTitle>
+        <DialogTitle>{t("commandPalette.title")}</DialogTitle>
         <DialogDescription>
-          Search or create todos with natural language
+          {t("commandPalette.description")}
         </DialogDescription>
       </DialogHeader>
       <DialogContent className="overflow-hidden p-0" showCloseButton={false}>
@@ -352,7 +354,7 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
         >
           <CommandInput
             ref={inputRef}
-            placeholder="Search or create todo..."
+            placeholder={t("commandPalette.placeholder")}
             value={inputValue}
             onValueChange={handleInputChange}
             onKeyDown={handleInputKeyDown}
@@ -371,15 +373,16 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
                   <>
                     {filteredDateOptions.length === 0 ? (
                       <CommandEmpty>
-                        No {acContext.kind === "schedule" ? "schedule" : "deadline"}{" "}
-                        options found.
+                        {acContext.kind === "schedule"
+                          ? t("commandPalette.noScheduleOptions")
+                          : t("commandPalette.noDeadlineOptions")}
                       </CommandEmpty>
                     ) : (
                       <CommandGroup
                         heading={
                           acContext.kind === "schedule"
-                            ? "Schedule"
-                            : "Deadline"
+                            ? t("commandPalette.schedule")
+                            : t("commandPalette.deadline")
                         }
                       >
                         {filteredDateOptions.map((option) => (
@@ -405,13 +408,16 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
                   <>
                     {filteredSuggestions.length === 0 ? (
                       <CommandEmpty>
-                        No {acContext.kind === "project" ? "projects" : "tags"}{" "}
-                        found.
+                        {acContext.kind === "project"
+                          ? t("commandPalette.noProjects")
+                          : t("commandPalette.noTags")}
                       </CommandEmpty>
                     ) : (
                       <CommandGroup
                         heading={
-                          acContext.kind === "project" ? "Projects" : "Tags"
+                          acContext.kind === "project"
+                            ? t("commandPalette.projects")
+                            : t("commandPalette.tags")
                         }
                       >
                         {filteredSuggestions.map((item) => (
@@ -452,7 +458,7 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
             ) : (
               <>
                 {parsed && parsed.title && (
-                  <CommandGroup heading="Quick Add">
+                  <CommandGroup heading={t("commandPalette.quickAdd")}>
                     <CommandItem
                       value={`__quick_add__ ${inputValue}`}
                       onSelect={handleCreateTodo}
@@ -494,7 +500,7 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
                             className="text-xs shrink-0"
                           >
                             <Clock className="h-3 w-3" />
-                            Someday
+                            {t("todo.someday")}
                           </Badge>
                         )}
                         {parsed.deadline && (
@@ -502,7 +508,7 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
                             variant="secondary"
                             className="text-xs shrink-0"
                           >
-                            Due {formatDateShort(parsed.deadline)}
+                            {t("todo.due", { date: formatDateShort(parsed.deadline) })}
                           </Badge>
                         )}
                       </div>
@@ -510,43 +516,43 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
                   </CommandGroup>
                 )}
 
-                <CommandEmpty>No results found.</CommandEmpty>
+                <CommandEmpty>{t("commandPalette.noResults")}</CommandEmpty>
 
-                <CommandGroup heading="Views">
+                <CommandGroup heading={t("commandPalette.views")}>
                   <CommandItem
                     onSelect={() => handleSelectView({ kind: "inbox" })}
                   >
                     <Inbox className="h-4 w-4" />
-                    <span>Inbox</span>
+                    <span>{t("sidebar.inbox")}</span>
                   </CommandItem>
                   <CommandItem
                     onSelect={() => handleSelectView({ kind: "today" })}
                   >
                     <Sun className="h-4 w-4" />
-                    <span>Today</span>
+                    <span>{t("sidebar.today")}</span>
                   </CommandItem>
                   <CommandItem
                     onSelect={() => handleSelectView({ kind: "upcoming" })}
                   >
                     <Calendar className="h-4 w-4" />
-                    <span>Upcoming</span>
+                    <span>{t("sidebar.upcoming")}</span>
                   </CommandItem>
                   <CommandItem
                     onSelect={() => handleSelectView({ kind: "someday" })}
                   >
                     <Clock className="h-4 w-4" />
-                    <span>Someday</span>
+                    <span>{t("sidebar.someday")}</span>
                   </CommandItem>
                   <CommandItem
                     onSelect={() => handleSelectView({ kind: "logbook" })}
                   >
                     <BookOpen className="h-4 w-4" />
-                    <span>Logbook</span>
+                    <span>{t("sidebar.logbook")}</span>
                   </CommandItem>
                 </CommandGroup>
 
                 {projects.length > 0 && (
-                  <CommandGroup heading="Projects">
+                  <CommandGroup heading={t("commandPalette.projects")}>
                     {projects.map((project) => (
                       <CommandItem
                         key={project.id}
@@ -567,7 +573,7 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
                 )}
 
                 {tags.length > 0 && (
-                  <CommandGroup heading="Tags">
+                  <CommandGroup heading={t("commandPalette.tags")}>
                     {tags.map((tag) => (
                       <CommandItem
                         key={tag.id}
@@ -586,7 +592,7 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
                 )}
 
                 {activeTodos.length > 0 && (
-                  <CommandGroup heading="Todos">
+                  <CommandGroup heading={t("commandPalette.todos")}>
                     {activeTodos.map((todo) => (
                       <CommandItem
                         key={todo.id}

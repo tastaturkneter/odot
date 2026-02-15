@@ -25,6 +25,7 @@ import { RecurrencePicker } from "@/components/shared/RecurrencePicker";
 import { ChecklistEditor } from "./ChecklistEditor";
 import { useTodoActions } from "@/hooks/useTodoActions";
 import { useSettings } from "@/hooks/useSettings";
+import { useTranslation } from "@/hooks/useTranslation";
 import { useQuery } from "@evolu/react";
 import { allProjects, allTags, allTodoTags } from "@/db/queries";
 import type { TodoRow } from "@/db/queries";
@@ -42,6 +43,7 @@ export function TodoDetail({
 }: TodoDetailProps) {
   const { updateTodo, deleteTodo } = useTodoActions();
   const { get: getSetting } = useSettings();
+  const t = useTranslation();
   const autoComplete = getSetting("autoCompleteTodo") === "1";
   const projects = useQuery(allProjects);
   const tags = useQuery(allTags);
@@ -139,7 +141,7 @@ export function TodoDetail({
         />
         <button
           className="shrink-0 rounded p-1 text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
-          title="Delete"
+          title={t("todo.delete")}
           onClick={() => {
             deleteTodo(todo.id);
             onCollapse();
@@ -149,7 +151,7 @@ export function TodoDetail({
         </button>
         <button
           className="shrink-0 rounded p-1 text-muted-foreground hover:bg-accent hover:text-foreground"
-          title="Close"
+          title={t("todo.close")}
           onClick={onCollapse}
         >
           <X className="h-4 w-4" />
@@ -187,8 +189,8 @@ export function TodoDetail({
             {hasWhen
               ? formatDateShort(todo.whenDate!)
               : isSomeday
-                ? "Someday"
-                : "When"}
+                ? t("todo.someday")
+                : t("todo.when")}
           </button>
         </WhenPicker>
 
@@ -205,7 +207,7 @@ export function TodoDetail({
             )}
           >
             <CalendarClock className="h-3 w-3" />
-            {hasDeadline ? formatDateShort(todo.deadline!) : "Deadline"}
+            {hasDeadline ? formatDateShort(todo.deadline!) : t("todo.deadline")}
           </button>
         </DeadlinePicker>
 
@@ -223,7 +225,7 @@ export function TodoDetail({
             style={project?.color ? { color: project.color } : undefined}
           >
             <FolderOpen className="h-3 w-3" />
-            {project ? project.name : "Project"}
+            {project ? project.name : t("todo.project")}
           </button>
         </ProjectPicker>
 
@@ -239,7 +241,7 @@ export function TodoDetail({
             <Tag className="h-3 w-3" />
             {todoTagList.length > 0
               ? todoTagList.map((t) => t.name).join(", ")
-              : "Tags"}
+              : t("todo.tags")}
           </button>
         </TagPicker>
 
@@ -256,7 +258,7 @@ export function TodoDetail({
             )}
           >
             <Repeat className="h-3 w-3" />
-            {recurrenceLabel ?? "Repeat"}
+            {recurrenceLabel ?? t("todo.repeat")}
           </button>
         </RecurrencePicker>
       </div>
@@ -267,7 +269,7 @@ export function TodoDetail({
           value={notes}
           onChange={(e) => setNotes(e.target.value)}
           onBlur={handleNotesBlur}
-          placeholder="Notes..."
+          placeholder={t("todo.notesPlaceholder")}
           className="min-h-[2rem] resize-none border-none p-0 text-sm shadow-none focus-visible:ring-0"
         />
       </div>

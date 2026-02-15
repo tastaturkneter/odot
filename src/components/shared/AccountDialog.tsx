@@ -25,6 +25,7 @@ import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
 import { QrCodeDisplay } from "@/components/shared/QrCodeDisplay";
 import { QrCodeScanner } from "@/components/shared/QrCodeScanner";
+import { useTranslation } from "@/hooks/useTranslation";
 
 interface AccountDialogProps {
   open: boolean;
@@ -40,6 +41,7 @@ function getStoredSyncUrl(): string {
 }
 
 export function AccountDialog({ open, onOpenChange }: AccountDialogProps) {
+  const t = useTranslation();
   const [mnemonic, setMnemonic] = useState<string | null>(null);
   const [showMnemonic, setShowMnemonic] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -88,11 +90,11 @@ export function AccountDialog({ open, onOpenChange }: AccountDialogProps) {
   const handleExport = useCallback(async () => {
     try {
       await exportData();
-      toast.success("Data exported successfully");
+      toast.success(t("account.exportSuccess"));
     } catch {
-      toast.error("Failed to export data");
+      toast.error(t("account.exportError"));
     }
-  }, []);
+  }, [t]);
 
   const handleImportFile = useCallback(
     async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -102,17 +104,17 @@ export function AccountDialog({ open, onOpenChange }: AccountDialogProps) {
       try {
         const text = await file.text();
         const count = await importData(text);
-        toast.success(`Imported ${count} records`);
+        toast.success(t("account.importedCount", { count }));
       } catch (err) {
         toast.error(
-          err instanceof Error ? err.message : "Failed to import data",
+          err instanceof Error ? err.message : t("account.importError"),
         );
       } finally {
         setImporting(false);
         if (fileInputRef.current) fileInputRef.current.value = "";
       }
     },
-    [],
+    [t],
   );
 
   const handleRestore = useCallback(async () => {
@@ -121,13 +123,12 @@ export function AccountDialog({ open, onOpenChange }: AccountDialogProps) {
 
     const result = Mnemonic.from(trimmed);
     if (!result.ok) {
-      setRestoreError("Invalid recovery phrase. Please check and try again.");
+      setRestoreError(t("account.invalidPhrase"));
       return;
     }
 
     await evolu.restoreAppOwner(result.value);
-    // restoreAppOwner triggers a reload by default
-  }, [restoreInput]);
+  }, [restoreInput, t]);
 
   const handleScan = useCallback(
     (text: string) => {
@@ -137,12 +138,11 @@ export function AccountDialog({ open, onOpenChange }: AccountDialogProps) {
         evolu.restoreAppOwner(result.value);
         return;
       }
-      // Invalid QR: fall back to manual input with scanned text pre-filled
       setRestoreMode(true);
       setRestoreInput(text);
-      setRestoreError("Scanned QR code is not a valid recovery phrase.");
+      setRestoreError(t("account.invalidQrPhrase"));
     },
-    [],
+    [t],
   );
 
   const handleScanError = useCallback((error: string) => {
@@ -172,25 +172,22 @@ export function AccountDialog({ open, onOpenChange }: AccountDialogProps) {
 
   const handleReset = useCallback(async () => {
     await evolu.resetAppOwner();
-    // resetAppOwner triggers a reload by default
   }, []);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-md">
         <DialogHeader>
-          <DialogTitle>Account & Sync</DialogTitle>
+          <DialogTitle>{t("account.title")}</DialogTitle>
           <DialogDescription>
-            Your data syncs automatically across devices using end-to-end
-            encryption. Use your recovery phrase to access your data on a new
-            device.
+            {t("account.description")}
           </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4">
           {/* Recovery Phrase Section */}
           <div>
-            <h3 className="mb-2 text-sm font-medium">Recovery Phrase</h3>
+            <h3 className="mb-2 text-sm font-medium">{t("account.recoveryPhrase")}</h3>
             {!showMnemonic ? (
               <Button
                 variant="outline"
@@ -198,13 +195,13 @@ export function AccountDialog({ open, onOpenChange }: AccountDialogProps) {
                 className="w-full"
                 onClick={() => setShowMnemonic(true)}
               >
-                Show recovery phrase
+                {t("account.showRecoveryPhrase")}
               </Button>
             ) : (
               <div className="space-y-2">
                 <div className="rounded-md bg-muted p-3">
                   <p className="font-mono text-xs leading-relaxed break-all select-all">
-                    {mnemonic ?? "No mnemonic available"}
+                    {mnemonic ?? t("account.noMnemonic")}
                   </p>
                 </div>
                 {mnemonic && (
@@ -218,12 +215,12 @@ export function AccountDialog({ open, onOpenChange }: AccountDialogProps) {
                       {copied ? (
                         <>
                           <Check className="mr-1 h-3.5 w-3.5" />
-                          Copied
+                          {t("account.copied")}
                         </>
                       ) : (
                         <>
                           <Copy className="mr-1 h-3.5 w-3.5" />
-                          Copy to clipboard
+                          {t("account.copyToClipboard")}
                         </>
                       )}
                     </Button>
@@ -234,13 +231,13 @@ export function AccountDialog({ open, onOpenChange }: AccountDialogProps) {
                       className="w-full"
                     >
                       <QrCode className="mr-1 h-3.5 w-3.5" />
-                      {showQrCode ? "Hide QR Code" : "Show QR Code"}
+                      {showQrCode ? t("account.hideQrCode") : t("account.showQrCode")}
                     </Button>
                     {showQrCode && <QrCodeDisplay value={mnemonic} />}
                   </>
                 )}
                 <p className="text-[11px] text-muted-foreground">
-                  Keep this phrase safe. Anyone with it can access your data.
+                  {t("account.keepPhraseSafe")}
                 </p>
               </div>
             )}
@@ -250,7 +247,7 @@ export function AccountDialog({ open, onOpenChange }: AccountDialogProps) {
 
           {/* Data Section */}
           <div>
-            <h3 className="mb-2 text-sm font-medium">Data</h3>
+            <h3 className="mb-2 text-sm font-medium">{t("account.data")}</h3>
             <div className="flex gap-2">
               <Button
                 variant="outline"
@@ -259,7 +256,7 @@ export function AccountDialog({ open, onOpenChange }: AccountDialogProps) {
                 onClick={handleExport}
               >
                 <Download className="mr-1 h-3.5 w-3.5" />
-                Export data
+                {t("account.exportData")}
               </Button>
               <Button
                 variant="outline"
@@ -269,7 +266,7 @@ export function AccountDialog({ open, onOpenChange }: AccountDialogProps) {
                 disabled={importing}
               >
                 <Upload className="mr-1 h-3.5 w-3.5" />
-                {importing ? "Importing..." : "Import data"}
+                {importing ? t("account.importing") : t("account.importData")}
               </Button>
               <input
                 ref={fileInputRef}
@@ -285,7 +282,7 @@ export function AccountDialog({ open, onOpenChange }: AccountDialogProps) {
 
           {/* Restore Section */}
           <div>
-            <h3 className="mb-2 text-sm font-medium">Restore from another device</h3>
+            <h3 className="mb-2 text-sm font-medium">{t("account.restore")}</h3>
             {scanMode ? (
               <QrCodeScanner
                 onScan={handleScan}
@@ -300,7 +297,7 @@ export function AccountDialog({ open, onOpenChange }: AccountDialogProps) {
                   className="flex-1"
                   onClick={() => setRestoreMode(true)}
                 >
-                  Enter recovery phrase
+                  {t("account.enterRecoveryPhrase")}
                 </Button>
                 <Button
                   variant="outline"
@@ -309,13 +306,13 @@ export function AccountDialog({ open, onOpenChange }: AccountDialogProps) {
                   onClick={() => setScanMode(true)}
                 >
                   <Camera className="mr-1 h-3.5 w-3.5" />
-                  Scan QR Code
+                  {t("account.scanQrCode")}
                 </Button>
               </div>
             ) : (
               <div className="space-y-2">
                 <Textarea
-                  placeholder="Enter your 24-word recovery phrase..."
+                  placeholder={t("account.restorePlaceholder")}
                   value={restoreInput}
                   onChange={(e) => {
                     setRestoreInput(e.target.value);
@@ -338,7 +335,7 @@ export function AccountDialog({ open, onOpenChange }: AccountDialogProps) {
                       setRestoreError(null);
                     }}
                   >
-                    Cancel
+                    {t("account.cancel")}
                   </Button>
                   <Button
                     size="sm"
@@ -346,11 +343,11 @@ export function AccountDialog({ open, onOpenChange }: AccountDialogProps) {
                     onClick={handleRestore}
                     disabled={!restoreInput.trim()}
                   >
-                    Restore
+                    {t("account.restoreButton")}
                   </Button>
                 </div>
                 <p className="text-[11px] text-muted-foreground">
-                  This will replace all local data with the restored account.
+                  {t("account.restoreWarning")}
                 </p>
               </div>
             )}
@@ -362,11 +359,10 @@ export function AccountDialog({ open, onOpenChange }: AccountDialogProps) {
           <div>
             <h3 className="mb-2 text-sm font-medium flex items-center gap-1.5">
               <Globe className="h-3.5 w-3.5" />
-              Sync Server
+              {t("account.syncServer")}
             </h3>
             <p className="mb-2 text-xs text-muted-foreground">
-              WebSocket URL for Evolu sync. Leave empty to use the default
-              server ({DEFAULT_SYNC_URL}). Changing this reloads the app.
+              {t("account.syncServerDescription", { url: DEFAULT_SYNC_URL })}
             </p>
             <div className="space-y-2">
               <input
@@ -378,7 +374,7 @@ export function AccountDialog({ open, onOpenChange }: AccountDialogProps) {
               />
               {syncDirty && (
                 <Button size="sm" className="w-full" onClick={handleSyncSave}>
-                  Save & reload
+                  {t("account.saveAndReload")}
                 </Button>
               )}
             </div>
@@ -390,7 +386,7 @@ export function AccountDialog({ open, onOpenChange }: AccountDialogProps) {
           <div>
             <h3 className="mb-2 text-sm font-medium text-destructive flex items-center gap-1">
               <AlertTriangle className="h-3.5 w-3.5" />
-              Danger Zone
+              {t("account.dangerZone")}
             </h3>
             {!confirmReset ? (
               <Button
@@ -399,13 +395,12 @@ export function AccountDialog({ open, onOpenChange }: AccountDialogProps) {
                 className="w-full border-destructive/50 text-destructive hover:bg-destructive/10"
                 onClick={() => setConfirmReset(true)}
               >
-                Delete all data
+                {t("account.deleteAllData")}
               </Button>
             ) : (
               <div className="space-y-2">
                 <p className="text-xs text-destructive">
-                  This will permanently delete all your data on this device and
-                  create a new empty account. This cannot be undone.
+                  {t("account.deleteWarning")}
                 </p>
                 <div className="flex gap-2">
                   <Button
@@ -414,7 +409,7 @@ export function AccountDialog({ open, onOpenChange }: AccountDialogProps) {
                     className="flex-1"
                     onClick={() => setConfirmReset(false)}
                   >
-                    Cancel
+                    {t("account.cancel")}
                   </Button>
                   <Button
                     variant="destructive"
@@ -422,7 +417,7 @@ export function AccountDialog({ open, onOpenChange }: AccountDialogProps) {
                     className="flex-1"
                     onClick={handleReset}
                   >
-                    Delete everything
+                    {t("account.deleteEverything")}
                   </Button>
                 </div>
               </div>

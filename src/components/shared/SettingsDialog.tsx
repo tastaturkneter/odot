@@ -2,6 +2,8 @@ import { Sun, Moon, Monitor } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useTheme, type Theme } from "@/hooks/useTheme";
 import { useSettings } from "@/hooks/useSettings";
+import { useTranslation } from "@/hooks/useTranslation";
+import { SUPPORTED_LOCALES } from "@/i18n";
 import {
   Dialog,
   DialogContent,
@@ -16,50 +18,73 @@ interface SettingsDialogProps {
   onOpenChange: (open: boolean) => void;
 }
 
-const themes: { value: Theme; label: string; icon: typeof Sun }[] = [
-  { value: "light", label: "Light", icon: Sun },
-  { value: "system", label: "System", icon: Monitor },
-  { value: "dark", label: "Dark", icon: Moon },
-];
-
 const upcomingOptions = [7, 14, 30] as const;
 
 export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
   const { theme, setTheme } = useTheme();
   const { get, set } = useSettings();
+  const t = useTranslation();
 
   const savedRange = get("upcomingRange");
   const daysAhead = savedRange ? parseInt(savedRange, 10) : 7;
+
+  const themes: { value: Theme; label: string; icon: typeof Sun }[] = [
+    { value: "light", label: t("settings.themeLight"), icon: Sun },
+    { value: "system", label: t("settings.themeSystem"), icon: Monitor },
+    { value: "dark", label: t("settings.themeDark"), icon: Moon },
+  ];
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-md">
         <DialogHeader>
-          <DialogTitle>Settings</DialogTitle>
+          <DialogTitle>{t("settings.title")}</DialogTitle>
           <DialogDescription>
-            Customize your preferences.
+            {t("settings.description")}
           </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4">
+          {/* Language */}
+          <div>
+            <h3 className="mb-2 text-sm font-medium">{t("settings.language")}</h3>
+            <div className="flex items-center justify-center gap-0.5 rounded-md border p-0.5">
+              {SUPPORTED_LOCALES.map((loc) => (
+                <button
+                  key={loc.code}
+                  className={`flex flex-1 items-center justify-center rounded px-2 py-1.5 text-sm transition-colors ${
+                    (get("locale") ?? "en") === loc.code
+                      ? "bg-accent text-accent-foreground"
+                      : "text-muted-foreground hover:text-foreground"
+                  }`}
+                  onClick={() => set("locale", loc.code)}
+                >
+                  {loc.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <Separator />
+
           {/* Appearance */}
           <div>
-            <h3 className="mb-2 text-sm font-medium">Appearance</h3>
+            <h3 className="mb-2 text-sm font-medium">{t("settings.appearance")}</h3>
             <div className="flex items-center justify-center gap-0.5 rounded-md border p-0.5">
-              {themes.map((t) => {
-                const Icon = t.icon;
+              {themes.map((th) => {
+                const Icon = th.icon;
                 return (
                   <button
-                    key={t.value}
+                    key={th.value}
                     className={`flex flex-1 items-center justify-center gap-1.5 rounded px-2 py-1.5 text-sm transition-colors ${
-                      theme === t.value
+                      theme === th.value
                         ? "bg-accent text-accent-foreground"
                         : "text-muted-foreground hover:text-foreground"
                     }`}
-                    onClick={() => setTheme(t.value)}
+                    onClick={() => setTheme(th.value)}
                   >
                     <Icon className="h-3.5 w-3.5" />
-                    {t.label}
+                    {th.label}
                   </button>
                 );
               })}
@@ -70,9 +95,9 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
 
           {/* Upcoming range */}
           <div>
-            <h3 className="mb-2 text-sm font-medium">Upcoming</h3>
+            <h3 className="mb-2 text-sm font-medium">{t("settings.upcoming")}</h3>
             <p className="mb-2 text-xs text-muted-foreground">
-              Number of days shown in the Upcoming view.
+              {t("settings.upcomingDescription")}
             </p>
             <div className="flex items-center justify-center gap-0.5 rounded-md border p-0.5">
               {upcomingOptions.map((days) => (
@@ -95,14 +120,14 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
 
           {/* Date format */}
           <div>
-            <h3 className="mb-2 text-sm font-medium">Date format</h3>
+            <h3 className="mb-2 text-sm font-medium">{t("settings.dateFormat")}</h3>
             <p className="mb-2 text-xs text-muted-foreground">
-              Order for short date input in quick add (e.g. !15.3 or !3.15).
+              {t("settings.dateFormatDescription")}
             </p>
             <div className="flex items-center justify-center gap-0.5 rounded-md border p-0.5">
               {([
-                { value: "day-first", label: "Day first (EU)" },
-                { value: "month-first", label: "Month first (US)" },
+                { value: "day-first", label: t("settings.dayFirst") },
+                { value: "month-first", label: t("settings.monthFirst") },
               ] as const).map((opt) => (
                 <button
                   key={opt.value}
@@ -123,12 +148,12 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
 
           {/* Behavior */}
           <div>
-            <h3 className="mb-2 text-sm font-medium">Behavior</h3>
+            <h3 className="mb-2 text-sm font-medium">{t("settings.behavior")}</h3>
             <label className="flex items-center justify-between gap-3 rounded-md border px-3 py-2">
               <div>
-                <p className="text-sm">Auto-complete todos</p>
+                <p className="text-sm">{t("settings.autoCompleteTodos")}</p>
                 <p className="text-xs text-muted-foreground">
-                  Complete a todo when all its checklist items are checked.
+                  {t("settings.autoCompleteDescription")}
                 </p>
               </div>
               <button

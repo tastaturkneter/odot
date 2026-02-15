@@ -28,6 +28,7 @@ import { RecurrencePicker } from "@/components/shared/RecurrencePicker";
 import { ModalTagPicker } from "./ModalTagPicker";
 import { useTodoActions } from "@/hooks/useTodoActions";
 import { useTagActions } from "@/hooks/useTagActions";
+import { useTranslation } from "@/hooks/useTranslation";
 import { useQuery } from "@evolu/react";
 import { allProjects, allTags } from "@/db/queries";
 
@@ -54,6 +55,7 @@ export function NewTodoModal({
 }: NewTodoModalProps) {
   const { createTodo, updateTodo } = useTodoActions();
   const { addTagToTodo } = useTagActions();
+  const t = useTranslation();
   const projects = useQuery(allProjects);
   const tags = useQuery(allTags);
 
@@ -115,12 +117,12 @@ export function NewTodoModal({
     }
 
     const locationLabel = projectId
-      ? projects.find((p) => p.id === projectId)?.name ?? "Inbox"
-      : whenDate === todayStr() ? "Today"
-      : whenDate ? "Upcoming"
-      : whenSomeday ? "Someday"
-      : "Inbox";
-    toast(`Todo created in ${locationLabel}`);
+      ? projects.find((p) => p.id === projectId)?.name ?? t("sidebar.inbox")
+      : whenDate === todayStr() ? t("sidebar.today")
+      : whenDate ? t("sidebar.upcoming")
+      : whenSomeday ? t("sidebar.someday")
+      : t("sidebar.inbox");
+    toast(t("commandPalette.todoCreatedIn", { location: locationLabel }));
 
     reset();
     onOpenChange(false);
@@ -170,11 +172,11 @@ export function NewTodoModal({
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent className="sm:max-w-lg" onKeyDown={handleKeyDown}>
         <DialogHeader>
-          <DialogTitle>New Todo</DialogTitle>
+          <DialogTitle>{t("newTodo.title")}</DialogTitle>
         </DialogHeader>
         <div className="space-y-3">
           <Input
-            placeholder="What needs to be done?"
+            placeholder={t("newTodo.placeholder")}
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             onKeyDown={(e) => {
@@ -187,7 +189,7 @@ export function NewTodoModal({
           />
 
           <Textarea
-            placeholder="Notes (optional)"
+            placeholder={t("newTodo.notesPlaceholder")}
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
             className="min-h-[3rem] resize-none text-sm"
@@ -219,8 +221,8 @@ export function NewTodoModal({
                 {whenDate
                   ? formatDateShort(whenDate)
                   : whenSomeday
-                    ? "Someday"
-                    : "When"}
+                    ? t("todo.someday")
+                    : t("todo.when")}
               </button>
             </WhenPicker>
 
@@ -235,7 +237,7 @@ export function NewTodoModal({
                 )}
               >
                 <CalendarClock className="h-3 w-3" />
-                {deadline ? formatDateShort(deadline) : "Deadline"}
+                {deadline ? formatDateShort(deadline) : t("todo.deadline")}
               </button>
             </DeadlinePicker>
 
@@ -251,7 +253,7 @@ export function NewTodoModal({
                 style={project?.color ? { color: project.color } : undefined}
               >
                 <FolderOpen className="h-3 w-3" />
-                {project ? project.name : "Project"}
+                {project ? project.name : t("todo.project")}
               </button>
             </ProjectPicker>
 
@@ -272,10 +274,10 @@ export function NewTodoModal({
                 <Tag className="h-3 w-3" />
                 <span className="truncate max-w-20">
                   {selectedTags.length === 0
-                    ? "Tags"
+                    ? t("todo.tags")
                     : selectedTags.length === 1
                       ? selectedTags[0]!.name
-                      : `${selectedTags.length} Tags`}
+                      : t("todo.tagsCount", { count: selectedTags.length })}
                 </span>
               </button>
             </ModalTagPicker>
@@ -297,7 +299,7 @@ export function NewTodoModal({
                 <Repeat className="h-3 w-3" />
                 {recurrenceRule
                   ? (matchPreset(recurrenceRule)?.label ?? ruleToText(recurrenceRule))
-                  : "Repeat"}
+                  : t("todo.repeat")}
               </button>
             </RecurrencePicker>
           </div>
@@ -305,8 +307,7 @@ export function NewTodoModal({
           {/* Actions */}
           <div className="flex items-center justify-between pt-1">
             <span className="text-xs text-muted-foreground">
-              {navigator.platform?.includes("Mac") ? "⌘" : "Ctrl"}+Enter to
-              save
+              {t("newTodo.saveHint", { key: navigator.platform?.includes("Mac") ? "\u2318" : "Ctrl" })}
             </span>
             <div className="flex gap-2">
               <Button
@@ -315,7 +316,7 @@ export function NewTodoModal({
                 size="sm"
                 onClick={() => handleOpenChange(false)}
               >
-                Cancel
+                {t("newTodo.cancel")}
               </Button>
               <Button
                 type="button"
@@ -323,7 +324,7 @@ export function NewTodoModal({
                 disabled={!title.trim()}
                 onClick={handleSubmit}
               >
-                Create
+                {t("newTodo.create")}
               </Button>
             </div>
           </div>

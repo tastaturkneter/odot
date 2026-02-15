@@ -10,6 +10,7 @@ import { useQuery } from "@evolu/react";
 import { allTags } from "@/db/queries";
 import { useTagActions } from "@/hooks/useTagActions";
 import { Tag, Check, Plus } from "lucide-react";
+import { useTranslation } from "@/hooks/useTranslation";
 
 interface ModalTagPickerProps {
   selectedTagIds: Set<string>;
@@ -24,6 +25,7 @@ export function ModalTagPicker({
   children,
   modal,
 }: ModalTagPickerProps) {
+  const t = useTranslation();
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
   const tags = useQuery(allTags);
@@ -84,7 +86,7 @@ export function ModalTagPicker({
       <div className="p-2">
         <Input
           ref={inputRef}
-          placeholder="Search or create..."
+          placeholder={t("picker.searchOrCreate")}
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           onKeyDown={(e) => {
@@ -118,12 +120,12 @@ export function ModalTagPicker({
             onClick={handleCreateAndToggle}
           >
             <Plus className="h-3.5 w-3.5" />
-            <span>Create &quot;{search.trim()}&quot;</span>
+            <span>{t("picker.createTag", { name: search.trim() })}</span>
           </button>
         )}
         {filtered.length === 0 && !search.trim() && (
           <p className="px-3 py-2 text-xs text-muted-foreground">
-            No tags yet
+            {t("picker.noTagsYet")}
           </p>
         )}
       </div>

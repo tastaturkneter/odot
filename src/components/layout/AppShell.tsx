@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import { Menu } from "lucide-react";
+import { useTranslation } from "@/hooks/useTranslation";
 import { Sidebar } from "./Sidebar";
 import { MainContent } from "./MainContent";
 import { useActiveView } from "@/hooks/useActiveView";
@@ -50,6 +51,7 @@ export function AppShell() {
   const { searchOpen, setSearchOpen, sidebarOpen, setSidebarOpen } =
     useActiveView();
   const isDesktop = useMediaQuery("(min-width: 768px)");
+  const t = useTranslation();
 
   return (
     <div className="flex h-screen overflow-hidden">
@@ -80,7 +82,7 @@ export function AppShell() {
         )}
         <Suspense
           fallback={
-            <p className="text-sm text-muted-foreground">Loading...</p>
+            <p className="text-sm text-muted-foreground">{t("app.loading")}</p>
           }
         >
           <ActiveViewContent />

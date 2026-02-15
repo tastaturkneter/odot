@@ -8,8 +8,10 @@ import { useHeadingActions } from "@/hooks/useHeadingActions";
 import { allProjects, allAreas, allTodos, allProjectHeadings } from "@/db/queries";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
+import { useTranslation } from "@/hooks/useTranslation";
 
 export function FloatingCreateButton() {
+  const t = useTranslation();
   const { activeView, setActiveView, setNewModalOpen } = useActiveView();
   const { createProject } = useProjectActions();
   const { createArea } = useAreaActions();
@@ -57,7 +59,7 @@ export function FloatingCreateButton() {
         <Button
           size="icon-lg"
           className="fixed bottom-6 right-6 z-50 size-14 rounded-full shadow-lg"
-          aria-label="Create new item"
+          aria-label={t("create.newItem")}
         >
           <Plus className="h-7 w-7" />
         </Button>
@@ -71,7 +73,7 @@ export function FloatingCreateButton() {
           }}
         >
           <CheckSquare className="h-4 w-4" />
-          Todo
+          {t("create.todo")}
         </button>
         <button
           className="flex w-full items-center gap-2 rounded-sm px-3 py-2 text-sm hover:bg-accent"
@@ -81,7 +83,7 @@ export function FloatingCreateButton() {
           }}
         >
           <FolderOpen className="h-4 w-4" />
-          Project
+          {t("create.project")}
         </button>
         <button
           className="flex w-full items-center gap-2 rounded-sm px-3 py-2 text-sm hover:bg-accent"
@@ -91,7 +93,7 @@ export function FloatingCreateButton() {
           }}
         >
           <Box className="h-4 w-4 text-cyan-500" />
-          Area
+          {t("create.area")}
         </button>
         {isProjectView && (
           <button
@@ -102,7 +104,7 @@ export function FloatingCreateButton() {
             }}
           >
             <Heading2 className="h-4 w-4" />
-            Heading
+            {t("create.heading")}
           </button>
         )}
       </PopoverContent>

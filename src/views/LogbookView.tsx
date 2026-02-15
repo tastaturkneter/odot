@@ -6,6 +6,7 @@ import { ViewHeader } from "@/components/shared/ViewHeader";
 import { BookOpen } from "lucide-react";
 import { TodoList } from "@/components/todo/TodoList";
 import type { TodoRow } from "@/db/queries";
+import { useTranslation } from "@/hooks/useTranslation";
 
 function groupByDate(todos: TodoRow[]): [string, TodoRow[]][] {
   const groups = new Map<string, TodoRow[]>();
@@ -22,16 +23,17 @@ function groupByDate(todos: TodoRow[]): [string, TodoRow[]][] {
 }
 
 export function LogbookView() {
+  const t = useTranslation();
   const todos = useQuery(allTodos);
   const filtered = filterLogbook([...todos]);
   const grouped = groupByDate(filtered);
 
   return (
     <div>
-      <ViewHeader title="Logbook" icon={<BookOpen className="h-6 w-6" style={{ color: "#10b981" }} />} />
+      <ViewHeader title={t("sidebar.logbook")} icon={<BookOpen className="h-6 w-6" style={{ color: "#10b981" }} />} />
       {filtered.length === 0 ? (
         <p className="py-8 text-center text-sm text-muted-foreground">
-          No completed todos yet.
+          {t("view.logbookEmpty")}
         </p>
       ) : (
         <div className="space-y-4">

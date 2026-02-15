@@ -9,6 +9,7 @@ import { useQuery } from "@evolu/react";
 import { allTags, allTodoTags } from "@/db/queries";
 import { useTagActions } from "@/hooks/useTagActions";
 import { Tag, Check, Plus } from "lucide-react";
+import { useTranslation } from "@/hooks/useTranslation";
 
 interface TagPickerProps {
   todoId: string;
@@ -16,6 +17,7 @@ interface TagPickerProps {
 }
 
 export function TagPicker({ todoId, children }: TagPickerProps) {
+  const t = useTranslation();
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
   const tags = useQuery(allTags);
@@ -93,7 +95,7 @@ export function TagPicker({ todoId, children }: TagPickerProps) {
       >
         <div className="p-2">
           <Input
-            placeholder="Search or create..."
+            placeholder={t("picker.searchOrCreate")}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             onKeyDown={(e) => {
@@ -128,12 +130,12 @@ export function TagPicker({ todoId, children }: TagPickerProps) {
               onClick={handleCreateAndAssign}
             >
               <Plus className="h-3.5 w-3.5" />
-              <span>Create "{search.trim()}"</span>
+              <span>{t("picker.createTag", { name: search.trim() })}</span>
             </button>
           )}
           {filtered.length === 0 && !search.trim() && (
             <p className="px-3 py-2 text-xs text-muted-foreground">
-              No tags yet
+              {t("picker.noTagsYet")}
             </p>
           )}
         </div>

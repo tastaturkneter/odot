@@ -16,6 +16,8 @@ import {
   type RRuleOptions,
 } from "@/lib/rrule";
 import { usePopoverKeyNav } from "@/hooks/usePopoverKeyNav";
+import { useTranslation } from "@/hooks/useTranslation";
+import type { TranslationKeys } from "@/i18n/en";
 
 interface RecurrencePickerProps {
   value: string | null;
@@ -25,11 +27,11 @@ interface RecurrencePickerProps {
 }
 
 const FREQ_OPTIONS = ["DAILY", "WEEKLY", "MONTHLY", "YEARLY"] as const;
-const FREQ_LABELS: Record<RRuleOptions["freq"], string> = {
-  DAILY: "days",
-  WEEKLY: "weeks",
-  MONTHLY: "months",
-  YEARLY: "years",
+const FREQ_LABEL_KEYS: Record<RRuleOptions["freq"], TranslationKeys> = {
+  DAILY: "recurrence.days",
+  WEEKLY: "recurrence.weeks",
+  MONTHLY: "recurrence.months",
+  YEARLY: "recurrence.years",
 };
 const WEEKDAYS = [
   { key: "MO", label: "Mo" },
@@ -54,6 +56,7 @@ export function RecurrencePicker({
   children,
   modal,
 }: RecurrencePickerProps) {
+  const t = useTranslation();
   const [open, setOpen] = useState(false);
   const [showCustom, setShowCustom] = useState(false);
   const { listRef, handleKeyDown: handleListKeyDown } = usePopoverKeyNav(open && !showCustom);
@@ -146,7 +149,7 @@ export function RecurrencePicker({
     <div className="flex flex-col gap-3 p-3">
       {/* Frequency + Interval */}
       <div className="flex items-center gap-2">
-        <span className="text-sm text-muted-foreground">Every</span>
+        <span className="text-sm text-muted-foreground">{t("recurrence.every")}</span>
         <input
           type="number"
           min={1}
@@ -162,7 +165,7 @@ export function RecurrencePicker({
         >
           {FREQ_OPTIONS.map((f) => (
             <option key={f} value={f}>
-              {FREQ_LABELS[f]}
+              {t(FREQ_LABEL_KEYS[f])}
             </option>
           ))}
         </select>
@@ -190,7 +193,7 @@ export function RecurrencePicker({
 
       {/* End options */}
       <div className="flex flex-col gap-2">
-        <span className="text-sm font-medium">Ends</span>
+        <span className="text-sm font-medium">{t("recurrence.ends")}</span>
         <label className="flex items-center gap-2 text-sm">
           <input
             type="radio"
@@ -199,7 +202,7 @@ export function RecurrencePicker({
             onChange={() => { setEndType("never"); setShowUntilCalendar(false); }}
             className="h-3.5 w-3.5 shrink-0 accent-primary"
           />
-          Never
+          {t("recurrence.never")}
         </label>
         <label className="flex items-center gap-2 text-sm">
           <input
@@ -209,7 +212,7 @@ export function RecurrencePicker({
             onChange={() => { setEndType("count"); setShowUntilCalendar(false); }}
             className="h-3.5 w-3.5 shrink-0 accent-primary"
           />
-          After
+          {t("recurrence.after")}
           <input
             type="number"
             min={1}
@@ -219,7 +222,7 @@ export function RecurrencePicker({
             disabled={endType !== "count"}
             className="h-7 w-14 rounded-md border border-input bg-transparent px-2 text-center text-sm shadow-xs disabled:opacity-50 focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] focus-visible:outline-none"
           />
-          times
+          {t("recurrence.times")}
         </label>
         <label className="flex items-center gap-2 text-sm">
           <input
@@ -229,14 +232,14 @@ export function RecurrencePicker({
             onChange={() => setEndType("until")}
             className="h-3.5 w-3.5 shrink-0 accent-primary"
           />
-          On
+          {t("recurrence.on")}
           <button
             type="button"
             disabled={endType !== "until"}
             onClick={() => setShowUntilCalendar((v) => !v)}
             className="h-7 rounded-md border border-input bg-transparent px-2 text-sm shadow-xs disabled:opacity-50 hover:bg-accent focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] focus-visible:outline-none"
           >
-            {until || "Pick date"}
+            {until || t("recurrence.pickDate")}
           </button>
         </label>
         {showUntilCalendar && endType === "until" && (
@@ -264,14 +267,14 @@ export function RecurrencePicker({
           onClick={() => { setShowCustom(false); setShowUntilCalendar(false); }}
           className="h-8 rounded-md px-3 text-sm hover:bg-accent focus-visible:bg-accent focus-visible:outline-none"
         >
-          Cancel
+          {t("recurrence.cancel")}
         </button>
         <button
           type="button"
           onClick={handleSave}
           className="h-8 rounded-md bg-primary px-3 text-sm text-primary-foreground hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-ring/50 focus-visible:ring-[3px]"
         >
-          Save
+          {t("recurrence.save")}
         </button>
       </div>
     </div>
@@ -297,7 +300,7 @@ export function RecurrencePicker({
         onClick={openCustom}
       >
         <Settings2 className="h-4 w-4 text-muted-foreground" />
-        <span className="flex-1 text-left">Custom…</span>
+        <span className="flex-1 text-left">{t("recurrence.custom")}</span>
         {value && !currentPreset && value !== null && (
           <Check className="h-3.5 w-3.5 text-primary" />
         )}
@@ -310,7 +313,7 @@ export function RecurrencePicker({
             onClick={() => pick(null)}
           >
             <X className="h-4 w-4" />
-            No repeat
+            {t("recurrence.noRepeat")}
           </button>
         </>
       )}

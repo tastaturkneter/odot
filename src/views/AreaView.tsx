@@ -25,8 +25,10 @@ import {
   useSortable,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { useTranslation } from "@/hooks/useTranslation";
 
 export function AreaView({ areaId }: { areaId: string }) {
+  const t = useTranslation();
   const { setActiveView } = useActiveView();
   const { deleteArea, updateArea } = useAreaActions();
   const { updateProject } = useProjectActions();
@@ -124,7 +126,7 @@ export function AreaView({ areaId }: { areaId: string }) {
             deleteArea(areaId);
             setActiveView({ kind: "inbox" });
           }}
-          title="Delete area"
+          title={t("view.deleteArea")}
         >
           <Trash2 className="h-4 w-4 text-muted-foreground hover:text-destructive" />
         </Button>
@@ -135,14 +137,14 @@ export function AreaView({ areaId }: { areaId: string }) {
           value={areaNotes}
           onChange={(e: ChangeEvent<HTMLTextAreaElement>) => setAreaNotes(e.target.value)}
           onBlur={handleAreaNotesBlur}
-          placeholder="Notes..."
+          placeholder={t("todo.notesPlaceholder")}
           className="min-h-[2rem] resize-none border-none p-0 text-sm shadow-none focus-visible:ring-0"
         />
       </div>
 
       {areaProjects.length === 0 ? (
         <p className="py-8 text-center text-sm text-muted-foreground">
-          No projects in this area.
+          {t("view.areaEmpty")}
         </p>
       ) : (
         <DndContext

@@ -8,8 +8,10 @@ import { Repeat, Box } from "lucide-react";
 import { useTodoActions } from "@/hooks/useTodoActions";
 import { useActiveView } from "@/hooks/useActiveView";
 import { ProgressCircle } from "@/components/shared/ProgressCircle";
+import { useTranslation } from "@/hooks/useTranslation";
 
 export function AnytimeView() {
+  const t = useTranslation();
   const { setActiveView } = useActiveView();
   const todos = useQuery(allTodos);
   const projects = useQuery(allProjects);
@@ -88,13 +90,13 @@ export function AnytimeView() {
   return (
     <div>
       <ViewHeader
-        title="Anytime"
+        title={t("sidebar.anytime")}
         icon={<Repeat className="h-6 w-6" style={{ color: "#8b5cf6" }} />}
       />
 
       {isEmpty ? (
         <p className="py-8 text-center text-sm text-muted-foreground">
-          No anytime todos.
+          {t("view.anytimeEmpty")}
         </p>
       ) : (
         <div>

@@ -10,6 +10,7 @@ import { useQuery } from "@evolu/react";
 import { allProjects } from "@/db/queries";
 import { FolderOpen, X, Check } from "lucide-react";
 import { usePopoverKeyNav } from "@/hooks/usePopoverKeyNav";
+import { useTranslation } from "@/hooks/useTranslation";
 
 interface ProjectPickerProps {
   value: string | null;
@@ -24,6 +25,7 @@ export function ProjectPicker({
   children,
   modal,
 }: ProjectPickerProps) {
+  const t = useTranslation();
   const [open, setOpen] = useState(false);
   const projects = useQuery(allProjects);
   const { listRef, handleKeyDown: handleListKeyDown } = usePopoverKeyNav(open);
@@ -76,7 +78,7 @@ export function ProjectPicker({
       ))}
       {projects.length === 0 && (
         <p className="px-3 py-2 text-xs text-muted-foreground">
-          No projects yet
+          {t("picker.noProjectsYet")}
         </p>
       )}
       {value !== null && (
@@ -87,7 +89,7 @@ export function ProjectPicker({
             onClick={() => pick(null)}
           >
             <X className="h-4 w-4" />
-            Remove from project
+            {t("picker.removeFromProject")}
           </button>
         </>
       )}

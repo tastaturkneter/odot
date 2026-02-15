@@ -24,6 +24,7 @@ import {
   strToDate,
 } from "@/lib/dates";
 import { usePopoverKeyNav } from "@/hooks/usePopoverKeyNav";
+import { useTranslation } from "@/hooks/useTranslation";
 
 interface WhenPickerProps {
   value: { date: string | null; someday: boolean };
@@ -33,6 +34,7 @@ interface WhenPickerProps {
 }
 
 export function WhenPicker({ value, onChange, children, modal }: WhenPickerProps) {
+  const t = useTranslation();
   const [open, setOpen] = useState(false);
   const [showCalendar, setShowCalendar] = useState(false);
   const { listRef, handleKeyDown } = usePopoverKeyNav(open);
@@ -98,37 +100,37 @@ export function WhenPicker({ value, onChange, children, modal }: WhenPickerProps
     <div ref={listRef} onKeyDown={handleKeyDown} className="flex flex-col py-1">
       <QuickOption
         icon={<Sun className="h-4 w-4 text-yellow-500" />}
-        label="Today"
+        label={t("picker.today")}
         detail={formatWeekday(todayStr())}
         onClick={() => pick(todayStr(), false)}
       />
       <QuickOption
         icon={<ArrowRight className="h-4 w-4 text-orange-500" />}
-        label="Tomorrow"
+        label={t("picker.tomorrow")}
         detail={formatWeekday(tomorrowStr())}
         onClick={() => pick(tomorrowStr(), false)}
       />
       <QuickOption
         icon={<Palmtree className="h-4 w-4 text-green-500" />}
-        label="This Weekend"
+        label={t("picker.thisWeekend")}
         detail={formatWeekday(thisWeekendStr())}
         onClick={() => pick(thisWeekendStr(), false)}
       />
       <QuickOption
         icon={<CalendarIcon className="h-4 w-4 text-blue-500" />}
-        label="Next Week"
+        label={t("picker.nextWeek")}
         detail={formatWeekday(nextWeekStr())}
         onClick={() => pick(nextWeekStr(), false)}
       />
       <QuickOption
         icon={<Clock className="h-4 w-4 text-muted-foreground" />}
-        label="Someday"
+        label={t("picker.someday")}
         onClick={() => pick(null, true)}
       />
       <Separator className="my-1" />
       <QuickOption
         icon={<CalendarIcon className="h-4 w-4" />}
-        label="Pick a date..."
+        label={t("picker.pickDate")}
         onClick={handleShowCalendar}
       />
       {(value.date !== null || value.someday) && (
@@ -136,7 +138,7 @@ export function WhenPicker({ value, onChange, children, modal }: WhenPickerProps
           <Separator className="my-1" />
           <QuickOption
             icon={<X className="h-4 w-4 text-destructive" />}
-            label="Clear"
+            label={t("picker.clear")}
             onClick={() => pick(null, false)}
           />
         </>

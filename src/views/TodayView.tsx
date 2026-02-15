@@ -9,8 +9,10 @@ import { NewTodoModal } from "@/components/todo/NewTodoModal";
 import { Button } from "@/components/ui/button";
 import { Plus, Eye, EyeOff, Sun } from "lucide-react";
 import { useActiveView } from "@/hooks/useActiveView";
+import { useTranslation } from "@/hooks/useTranslation";
 
 export function TodayView() {
+  const t = useTranslation();
   const { newModalOpen, setNewModalOpen } = useActiveView();
   const [showCompleted, setShowCompleted] = useState(false);
   const todos = useQuery(allTodos);
@@ -18,23 +20,23 @@ export function TodayView() {
 
   return (
     <div>
-      <ViewHeader title="Today" icon={<Sun className="h-6 w-6" style={{ color: "#f59e0b" }} />}>
+      <ViewHeader title={t("sidebar.today")} icon={<Sun className="h-6 w-6" style={{ color: "#f59e0b" }} />}>
         <Button
           size="sm"
           variant="ghost"
           onClick={() => setShowCompleted((v) => !v)}
-          title={showCompleted ? "Hide completed" : "Show completed"}
+          title={showCompleted ? t("view.hideCompleted") : t("view.showCompleted")}
         >
           {showCompleted ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
         </Button>
         <Button size="sm" variant="ghost" onClick={() => setNewModalOpen(true)}>
           <Plus className="mr-1 h-4 w-4" />
-          New
+          {t("view.new")}
         </Button>
       </ViewHeader>
       <TodoList
         todos={filtered}
-        emptyMessage="Nothing scheduled for today."
+        emptyMessage={t("view.todayEmpty")}
       />
       <NewTodoModal
         open={newModalOpen}
