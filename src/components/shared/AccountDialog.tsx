@@ -7,8 +7,9 @@ import {
   Upload,
   QrCode,
   Camera,
+  Globe,
 } from "lucide-react";
-import { evolu } from "@/db/evolu";
+import { evolu, SYNC_URL_KEY, DEFAULT_SYNC_URL } from "@/db/evolu";
 import { Mnemonic } from "@evolu/common";
 import { exportData, importData } from "@/lib/exportImport";
 import { toast } from "sonner";
@@ -30,6 +31,14 @@ interface AccountDialogProps {
   onOpenChange: (open: boolean) => void;
 }
 
+function getStoredSyncUrl(): string {
+  try {
+    return localStorage.getItem(SYNC_URL_KEY) || "";
+  } catch {
+    return "";
+  }
+}
+
 export function AccountDialog({ open, onOpenChange }: AccountDialogProps) {
   const [mnemonic, setMnemonic] = useState<string | null>(null);
   const [showMnemonic, setShowMnemonic] = useState(false);
@@ -42,6 +51,8 @@ export function AccountDialog({ open, onOpenChange }: AccountDialogProps) {
   const [confirmReset, setConfirmReset] = useState(false);
   const [importing, setImporting] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [syncUrl, setSyncUrl] = useState(getStoredSyncUrl);
+  const [syncDirty, setSyncDirty] = useState(false);
 
   useEffect(() => {
     if (!open) return;
@@ -62,6 +73,8 @@ export function AccountDialog({ open, onOpenChange }: AccountDialogProps) {
       setRestoreError(null);
       setConfirmReset(false);
       setImporting(false);
+      setSyncUrl(getStoredSyncUrl());
+      setSyncDirty(false);
     }
   }, [open]);
 
@@ -140,6 +153,22 @@ export function AccountDialog({ open, onOpenChange }: AccountDialogProps) {
   const handleScanCancel = useCallback(() => {
     setScanMode(false);
   }, []);
+
+  function handleSyncUrlChange(value: string) {
+    setSyncUrl(value);
+    const stored = getStoredSyncUrl();
+    setSyncDirty(value !== stored);
+  }
+
+  function handleSyncSave() {
+    const trimmed = syncUrl.trim();
+    if (trimmed) {
+      localStorage.setItem(SYNC_URL_KEY, trimmed);
+    } else {
+      localStorage.removeItem(SYNC_URL_KEY);
+    }
+    window.location.reload();
+  }
 
   const handleReset = useCallback(async () => {
     await evolu.resetAppOwner();
@@ -325,6 +354,34 @@ export function AccountDialog({ open, onOpenChange }: AccountDialogProps) {
                 </p>
               </div>
             )}
+          </div>
+
+          <Separator />
+
+          {/* Sync server URL */}
+          <div>
+            <h3 className="mb-2 text-sm font-medium flex items-center gap-1.5">
+              <Globe className="h-3.5 w-3.5" />
+              Sync Server
+            </h3>
+            <p className="mb-2 text-xs text-muted-foreground">
+              WebSocket URL for Evolu sync. Leave empty to use the default
+              server ({DEFAULT_SYNC_URL}). Changing this reloads the app.
+            </p>
+            <div className="space-y-2">
+              <input
+                type="url"
+                value={syncUrl}
+                onChange={(e) => handleSyncUrlChange(e.target.value)}
+                placeholder={DEFAULT_SYNC_URL}
+                className="w-full rounded-md border bg-transparent px-3 py-1.5 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring"
+              />
+              {syncDirty && (
+                <Button size="sm" className="w-full" onClick={handleSyncSave}>
+                  Save & reload
+                </Button>
+              )}
+            </div>
           </div>
 
           <Separator />

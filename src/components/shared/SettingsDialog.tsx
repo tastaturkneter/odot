@@ -1,9 +1,7 @@
-import { useState, useEffect } from "react";
-import { Sun, Moon, Monitor, Globe } from "lucide-react";
+import { Sun, Moon, Monitor } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useTheme, type Theme } from "@/hooks/useTheme";
 import { useSettings } from "@/hooks/useSettings";
-import { SYNC_URL_KEY, DEFAULT_SYNC_URL } from "@/db/evolu";
 import {
   Dialog,
   DialogContent,
@@ -12,7 +10,6 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
-import { Button } from "@/components/ui/button";
 
 interface SettingsDialogProps {
   open: boolean;
@@ -27,48 +24,12 @@ const themes: { value: Theme; label: string; icon: typeof Sun }[] = [
 
 const upcomingOptions = [7, 14, 30] as const;
 
-function getStoredSyncUrl(): string {
-  try {
-    return localStorage.getItem(SYNC_URL_KEY) || "";
-  } catch {
-    return "";
-  }
-}
-
 export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
   const { theme, setTheme } = useTheme();
   const { get, set } = useSettings();
 
   const savedRange = get("upcomingRange");
   const daysAhead = savedRange ? parseInt(savedRange, 10) : 7;
-
-  const [syncUrl, setSyncUrl] = useState(getStoredSyncUrl);
-  const [syncDirty, setSyncDirty] = useState(false);
-
-  // Reset local state when dialog opens
-  useEffect(() => {
-    if (open) {
-      const stored = getStoredSyncUrl();
-      setSyncUrl(stored);
-      setSyncDirty(false);
-    }
-  }, [open]);
-
-  function handleSyncUrlChange(value: string) {
-    setSyncUrl(value);
-    const stored = getStoredSyncUrl();
-    setSyncDirty(value !== stored);
-  }
-
-  function handleSyncSave() {
-    const trimmed = syncUrl.trim();
-    if (trimmed) {
-      localStorage.setItem(SYNC_URL_KEY, trimmed);
-    } else {
-      localStorage.removeItem(SYNC_URL_KEY);
-    }
-    window.location.reload();
-  }
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -196,34 +157,6 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
                 />
               </button>
             </label>
-          </div>
-
-          <Separator />
-
-          {/* Sync server URL */}
-          <div>
-            <h3 className="mb-2 text-sm font-medium flex items-center gap-1.5">
-              <Globe className="h-3.5 w-3.5" />
-              Sync Server
-            </h3>
-            <p className="mb-2 text-xs text-muted-foreground">
-              WebSocket URL for Evolu sync. Leave empty to use the default
-              server ({DEFAULT_SYNC_URL}). Changing this reloads the app.
-            </p>
-            <div className="space-y-2">
-              <input
-                type="url"
-                value={syncUrl}
-                onChange={(e) => handleSyncUrlChange(e.target.value)}
-                placeholder={DEFAULT_SYNC_URL}
-                className="w-full rounded-md border bg-transparent px-3 py-1.5 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring"
-              />
-              {syncDirty && (
-                <Button size="sm" className="w-full" onClick={handleSyncSave}>
-                  Save & reload
-                </Button>
-              )}
-            </div>
           </div>
 
           <Separator />
