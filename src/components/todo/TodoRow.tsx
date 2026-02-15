@@ -161,7 +161,7 @@ export function TodoRow({
       <button
         ref={dragHandleRef}
         {...(dragListeners as React.HTMLAttributes<HTMLButtonElement>)}
-        className="absolute -left-5 top-2.5 cursor-grab touch-none text-muted-foreground/40 opacity-0 transition-opacity group-hover:opacity-100 active:cursor-grabbing"
+        className="absolute -left-5 top-2.5 cursor-grab touch-none text-muted-foreground/40 opacity-40 md:opacity-0 transition-opacity md:group-hover:opacity-100 active:cursor-grabbing"
         tabIndex={-1}
         aria-label="Drag to reorder"
       >
@@ -250,10 +250,10 @@ export function TodoRow({
       {!completed && (
         <div
           className={cn(
-            "flex shrink-0 items-center gap-0.5 transition-opacity",
+            "hidden md:flex shrink-0 items-center gap-0.5 transition-opacity",
             isSelected
-              ? "opacity-100"
-              : "opacity-0 group-hover:opacity-100",
+              ? "md:opacity-100"
+              : "md:opacity-0 md:group-hover:opacity-100",
           )}
         >
           <WhenPicker
@@ -315,10 +315,10 @@ export function TodoRow({
       {onDelete && (
         <div
           className={cn(
-            "mr-1.5 flex shrink-0 items-center transition-opacity",
+            "mr-1.5 hidden md:flex shrink-0 items-center transition-opacity",
             isSelected
-              ? "opacity-100"
-              : "opacity-0 group-hover:opacity-100",
+              ? "md:opacity-100"
+              : "md:opacity-0 md:group-hover:opacity-100",
           )}
         >
           <button

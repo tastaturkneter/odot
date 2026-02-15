@@ -25,6 +25,7 @@ import { allChecklistItems } from "@/db/queries";
 import type { TodoRow as TodoRowType } from "@/db/queries";
 import { KeyboardShortcutHandler } from "./KeyboardShortcutHandler";
 import type { PickerType } from "./TodoRow";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
 
 interface TodoListProps {
   todos: TodoRowType[];
@@ -51,6 +52,7 @@ export function TodoList({
   } = useSelection();
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [pickerToOpen, setPickerToOpen] = useState<PickerType | null>(null);
+  const isDesktop = useMediaQuery("(min-width: 768px)");
 
   const orderedIds = useMemo(() => todos.map((t) => t.id), [todos]);
 
@@ -84,6 +86,11 @@ export function TodoList({
   );
 
   function handleClick(id: string, e: React.MouseEvent) {
+    // On mobile: if todo is already the single selection, expand it
+    if (!isDesktop && selectedIds.has(id) && isSingleSelection()) {
+      setExpandedId(id);
+      return;
+    }
     handleSelect(id, orderedIds, { metaKey: e.metaKey || e.ctrlKey, shiftKey: e.shiftKey });
     // Close detail view when multi-selecting
     if (e.metaKey || e.ctrlKey || e.shiftKey) {

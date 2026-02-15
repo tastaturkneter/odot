@@ -13,6 +13,7 @@ import {
   Clock,
   Repeat,
   Trash2,
+  X,
 } from "lucide-react";
 import { formatDateShort, isOverdue } from "@/lib/dates";
 import { matchPreset, ruleToText } from "@/lib/rrule";
@@ -145,6 +146,13 @@ export function TodoDetail({
           }}
         >
           <Trash2 className="h-4 w-4" />
+        </button>
+        <button
+          className="shrink-0 rounded p-1 text-muted-foreground hover:bg-accent hover:text-foreground"
+          title="Close"
+          onClick={onCollapse}
+        >
+          <X className="h-4 w-4" />
         </button>
       </div>
 

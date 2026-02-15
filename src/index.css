@@ -2,6 +2,11 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* Disable double-tap zoom on mobile while preserving pinch-to-zoom */
+html {
+  touch-action: manipulation;
+}
+
 :root {
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
