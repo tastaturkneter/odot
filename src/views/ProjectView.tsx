@@ -26,7 +26,7 @@ import { TodoDetail } from "@/components/todo/TodoDetail";
 import { NewTodoModal } from "@/components/todo/NewTodoModal";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Plus, Trash2, GripVertical, Heading2 } from "lucide-react";
+import { Plus, Trash2, GripVertical, Heading2, Archive } from "lucide-react";
 import { useActiveView } from "@/hooks/useActiveView";
 import { useProjectActions } from "@/hooks/useProjectActions";
 import { useTodoActions } from "@/hooks/useTodoActions";
@@ -160,7 +160,7 @@ function SortableHeadingRow({
 export function ProjectView({ projectId }: { projectId: string }) {
   const t = useTranslation();
   const { newModalOpen, setNewModalOpen, setActiveView } = useActiveView();
-  const { deleteProject, updateProject: updateProjectFields } = useProjectActions();
+  const { deleteProject, archiveProject, updateProject: updateProjectFields } = useProjectActions();
   const { toggleComplete, deleteTodo, updateTodo } = useTodoActions();
   const { createHeading, updateHeading, deleteHeading } = useHeadingActions();
   const [showCompleted, setShowCompleted] = useState(false);
@@ -431,6 +431,17 @@ export function ProjectView({ projectId }: { projectId: string }) {
         <Button size="sm" variant="ghost" onClick={handleAddHeading}>
           <Heading2 className="mr-1 h-4 w-4" />
           {t("view.heading")}
+        </Button>
+        <Button
+          size="sm"
+          variant="ghost"
+          onClick={() => {
+            archiveProject(projectId);
+            setActiveView({ kind: "inbox" });
+          }}
+          title={t("view.archiveProject")}
+        >
+          <Archive className="h-4 w-4 text-muted-foreground" />
         </Button>
         <Button
           size="sm"

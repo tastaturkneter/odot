@@ -15,9 +15,11 @@ import {
   Trash2,
   Repeat,
   Settings,
+  Archive,
 } from "lucide-react";
 import { useQuery, useEvoluError } from "@evolu/react";
-import { allTodos, allProjects, allAreas, allTags, allTodoTags, deletedTodos } from "@/db/queries";
+import { allProjects, allAreas, allTags, allTodoTags, deletedTodos } from "@/db/queries";
+import { useActiveTodos } from "@/hooks/useActiveTodos";
 import { useActiveView } from "@/hooks/useActiveView";
 import { useProjectActions } from "@/hooks/useProjectActions";
 import { useAreaActions } from "@/hooks/useAreaActions";
@@ -139,7 +141,7 @@ export function Sidebar() {
   const t = useTranslation();
   const [accountOpen, setAccountOpen] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
-  const todos = useQuery(allTodos);
+  const todos = useActiveTodos();
   const projects = useQuery(allProjects);
   const areas = useQuery(allAreas);
   const tags = useQuery(allTags);
@@ -564,6 +566,13 @@ export function Sidebar() {
             color="#10b981"
             isActive={isActive({ kind: "logbook" })}
             onClick={() => setActiveView({ kind: "logbook" })}
+          />
+          <SidebarItem
+            icon={Archive}
+            label={t("sidebar.archive")}
+            color="#9ca3af"
+            isActive={isActive({ kind: "archive" })}
+            onClick={() => setActiveView({ kind: "archive" })}
           />
           <SidebarItem
             icon={Trash2}

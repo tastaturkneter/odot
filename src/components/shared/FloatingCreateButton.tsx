@@ -5,7 +5,8 @@ import { useActiveView } from "@/hooks/useActiveView";
 import { useProjectActions } from "@/hooks/useProjectActions";
 import { useAreaActions } from "@/hooks/useAreaActions";
 import { useHeadingActions } from "@/hooks/useHeadingActions";
-import { allProjects, allAreas, allTodos, allProjectHeadings } from "@/db/queries";
+import { allProjects, allAreas, allProjectHeadings } from "@/db/queries";
+import { useActiveTodos } from "@/hooks/useActiveTodos";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 import { useTranslation } from "@/hooks/useTranslation";
@@ -19,7 +20,7 @@ export function FloatingCreateButton() {
 
   const projects = useQuery(allProjects);
   const areas = useQuery(allAreas);
-  const todos = useQuery(allTodos);
+  const todos = useActiveTodos();
   const projectHeadings = useQuery(allProjectHeadings);
 
   const [popoverOpen, setPopoverOpen] = useState(false);

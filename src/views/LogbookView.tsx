@@ -1,5 +1,4 @@
-import { useQuery } from "@evolu/react";
-import { allTodos } from "@/db/queries";
+import { useActiveTodos } from "@/hooks/useActiveTodos";
 import { filterLogbook } from "@/lib/filters";
 import { formatDateLabel } from "@/lib/dates";
 import { ViewHeader } from "@/components/shared/ViewHeader";
@@ -24,7 +23,7 @@ function groupByDate(todos: TodoRow[]): [string, TodoRow[]][] {
 
 export function LogbookView() {
   const t = useTranslation();
-  const todos = useQuery(allTodos);
+  const todos = useActiveTodos();
   const filtered = filterLogbook([...todos]);
   const grouped = groupByDate(filtered);
 

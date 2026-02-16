@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useQuery } from "@evolu/react";
-import { allTodos, allTodoTags } from "@/db/queries";
+import { allTodoTags } from "@/db/queries";
+import { useActiveTodos } from "@/hooks/useActiveTodos";
 import { filterInbox, buildTodoTagMap } from "@/lib/filters";
 import { ViewHeader } from "@/components/shared/ViewHeader";
 import { TodoList } from "@/components/todo/TodoList";
@@ -14,7 +15,7 @@ export function InboxView() {
   const t = useTranslation();
   const { newModalOpen, setNewModalOpen } = useActiveView();
   const [showCompleted, setShowCompleted] = useState(false);
-  const todos = useQuery(allTodos);
+  const todos = useActiveTodos();
   const todoTags = useQuery(allTodoTags);
   const todoTagMap = buildTodoTagMap([...todoTags]);
   const filtered = filterInbox([...todos], todoTagMap, showCompleted);

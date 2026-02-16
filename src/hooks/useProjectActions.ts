@@ -28,5 +28,13 @@ export function useProjectActions() {
     return evolu.update("project", { id, isDeleted: 1 } as never);
   }
 
-  return { createProject, updateProject, deleteProject };
+  function archiveProject(id: string) {
+    return evolu.update("project", { id, isArchived: 1 } as never);
+  }
+
+  function unarchiveProject(id: string) {
+    return evolu.update("project", { id, isArchived: null } as never);
+  }
+
+  return { createProject, updateProject, deleteProject, archiveProject, unarchiveProject };
 }

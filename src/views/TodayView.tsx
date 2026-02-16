@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { useQuery } from "@evolu/react";
-import { allTodos } from "@/db/queries";
+import { useActiveTodos } from "@/hooks/useActiveTodos";
 import { filterToday } from "@/lib/filters";
 import { todayStr } from "@/lib/dates";
 import { ViewHeader } from "@/components/shared/ViewHeader";
@@ -15,7 +14,7 @@ export function TodayView() {
   const t = useTranslation();
   const { newModalOpen, setNewModalOpen } = useActiveView();
   const [showCompleted, setShowCompleted] = useState(false);
-  const todos = useQuery(allTodos);
+  const todos = useActiveTodos();
   const filtered = filterToday([...todos], showCompleted);
 
   return (

@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { useQuery } from "@evolu/react";
-import { allTodos } from "@/db/queries";
+import { useActiveTodos } from "@/hooks/useActiveTodos";
 import { filterUpcoming } from "@/lib/filters";
 import { todayStr, tomorrowStr, formatDateLabel, strToDate, dateToStr } from "@/lib/dates";
 import type { TodoRow } from "@/db/queries";
@@ -71,7 +70,7 @@ export function UpcomingView() {
   const { newModalOpen, setNewModalOpen } = useActiveView();
   const [showCompleted, setShowCompleted] = useState(false);
   const { get, set } = useSettings();
-  const todos = useQuery(allTodos);
+  const todos = useActiveTodos();
 
   const savedRange = get("upcomingRange");
   const daysAhead = savedRange ? parseInt(savedRange, 10) : 7;

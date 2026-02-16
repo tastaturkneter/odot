@@ -30,7 +30,18 @@ const allProjects = evolu.createQuery((db) =>
     .selectFrom("project")
     .select(["id", "name", "notes", "color", "position", "areaId"])
     .where("isDeleted", "is not", 1)
+    .where("isArchived", "is not", 1)
     .orderBy("position", "asc"),
+);
+
+// All archived projects
+const archivedProjects = evolu.createQuery((db) =>
+  db
+    .selectFrom("project")
+    .select(["id", "name", "notes", "color", "position", "areaId"])
+    .where("isDeleted", "is not", 1)
+    .where("isArchived", "is", 1)
+    .orderBy("updatedAt", "desc"),
 );
 
 // All non-deleted areas
@@ -110,6 +121,7 @@ const allSettings = evolu.createQuery((db) =>
 
 export type TodoRow = InferRow<typeof allTodos>;
 export type ProjectRow = InferRow<typeof allProjects>;
+export type ArchivedProjectRow = InferRow<typeof archivedProjects>;
 export type TagRow = InferRow<typeof allTags>;
 export type TodoTagRow = InferRow<typeof allTodoTags>;
 export type AreaRow = InferRow<typeof allAreas>;
@@ -120,6 +132,7 @@ export type DeletedTodoRow = InferRow<typeof deletedTodos>;
 export {
   allTodos,
   allProjects,
+  archivedProjects,
   allAreas,
   allTags,
   allTodoTags,

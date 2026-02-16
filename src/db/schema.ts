@@ -54,6 +54,7 @@ const Schema = {
     color: nullOr(String1000), // hex color
     position: Number,
     areaId: nullOr(AreaId),
+    isArchived: nullOr(SqliteBoolean),
   },
   area: {
     id: AreaId,

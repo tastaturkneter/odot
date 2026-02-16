@@ -1,4 +1,4 @@
-export type TemporalView = "inbox" | "today" | "anytime" | "upcoming" | "someday" | "logbook" | "trash";
+export type TemporalView = "inbox" | "today" | "anytime" | "upcoming" | "someday" | "logbook" | "archive" | "trash";
 
 export type ProjectView = {
   kind: "project";
@@ -28,6 +28,7 @@ export const temporalViews = [
   "upcoming",
   "someday",
   "logbook",
+  "archive",
   "trash",
 ] as const;
 
@@ -59,6 +60,7 @@ export function pathToView(path: string): ActiveView {
     root === "upcoming" ||
     root === "someday" ||
     root === "logbook" ||
+    root === "archive" ||
     root === "trash"
   )
     return { kind: root };
@@ -80,6 +82,8 @@ export function viewLabel(view: ActiveView): string {
       return "Someday";
     case "logbook":
       return "Logbook";
+    case "archive":
+      return "Archive";
     case "trash":
       return "Trash";
     case "project":

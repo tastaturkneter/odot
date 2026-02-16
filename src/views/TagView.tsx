@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useQuery } from "@evolu/react";
-import { allTodos, allTags, allTodoTags } from "@/db/queries";
+import { allTags, allTodoTags } from "@/db/queries";
+import { useActiveTodos } from "@/hooks/useActiveTodos";
 import { filterByTag, buildTodoTagMap } from "@/lib/filters";
 import { ViewHeader } from "@/components/shared/ViewHeader";
 import { TodoList } from "@/components/todo/TodoList";
@@ -14,7 +15,7 @@ export function TagView({ tagId }: { tagId: string }) {
   const t = useTranslation();
   const { newModalOpen, setNewModalOpen } = useActiveView();
   const [showCompleted, setShowCompleted] = useState(false);
-  const todos = useQuery(allTodos);
+  const todos = useActiveTodos();
   const tags = useQuery(allTags);
   const todoTags = useQuery(allTodoTags);
   const tag = tags.find((t) => t.id === tagId);

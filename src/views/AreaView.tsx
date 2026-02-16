@@ -1,7 +1,8 @@
 import { useState, useEffect, useMemo, type ChangeEvent } from "react";
 import { ConfirmDeleteDialog } from "@/components/shared/ConfirmDeleteDialog";
 import { useQuery } from "@evolu/react";
-import { allTodos, allProjects, allAreas } from "@/db/queries";
+import { allProjects, allAreas } from "@/db/queries";
+import { useActiveTodos } from "@/hooks/useActiveTodos";
 import type { ProjectRow } from "@/db/queries";
 import { ViewHeader } from "@/components/shared/ViewHeader";
 import { Button } from "@/components/ui/button";
@@ -33,7 +34,7 @@ export function AreaView({ areaId }: { areaId: string }) {
   const { setActiveView } = useActiveView();
   const { deleteArea, updateArea } = useAreaActions();
   const { updateProject } = useProjectActions();
-  const todos = useQuery(allTodos);
+  const todos = useActiveTodos();
   const projects = useQuery(allProjects);
   const areas = useQuery(allAreas);
 

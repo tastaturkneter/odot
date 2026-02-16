@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { useQuery } from "@evolu/react";
-import { allTodos, allProjects, allAreas } from "@/db/queries";
+import { allProjects, allAreas } from "@/db/queries";
+import { useActiveTodos } from "@/hooks/useActiveTodos";
 import type { TodoRow } from "@/db/queries";
 import { ViewHeader } from "@/components/shared/ViewHeader";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -13,7 +14,7 @@ import { useTranslation } from "@/hooks/useTranslation";
 export function AnytimeView() {
   const t = useTranslation();
   const { setActiveView } = useActiveView();
-  const todos = useQuery(allTodos);
+  const todos = useActiveTodos();
   const projects = useQuery(allProjects);
   const areas = useQuery(allAreas);
   const { toggleComplete } = useTodoActions();

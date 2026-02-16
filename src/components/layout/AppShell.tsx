@@ -18,6 +18,7 @@ import { ProjectView } from "@/views/ProjectView";
 import { TagView } from "@/views/TagView";
 import { AreaView } from "@/views/AreaView";
 import { TrashView } from "@/views/TrashView";
+import { ArchiveView } from "@/views/ArchiveView";
 import { AnytimeView } from "@/views/AnytimeView";
 
 function ActiveViewContent() {
@@ -36,6 +37,8 @@ function ActiveViewContent() {
       return <SomedayView />;
     case "logbook":
       return <LogbookView />;
+    case "archive":
+      return <ArchiveView />;
     case "trash":
       return <TrashView />;
     case "project":

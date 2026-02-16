@@ -1,6 +1,7 @@
 import { useState, useRef, useMemo, useCallback } from "react";
 import { useQuery } from "@evolu/react";
-import { allTodos, allProjects, allTags, allTodoTags } from "@/db/queries";
+import { allProjects, allTags, allTodoTags } from "@/db/queries";
+import { useActiveTodos } from "@/hooks/useActiveTodos";
 import { useActiveView } from "@/hooks/useActiveView";
 import { useTodoActions } from "@/hooks/useTodoActions";
 import { useSettings } from "@/hooks/useSettings";
@@ -91,7 +92,7 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
   const t = useTranslation();
   const dateFormat = getSetting("dateFormat") === "month-first" ? "month-first" : "day-first" as const;
 
-  const todos = useQuery(allTodos);
+  const todos = useActiveTodos();
   const projects = useQuery(allProjects);
   const tags = useQuery(allTags);
   const todoTags = useQuery(allTodoTags);
