@@ -176,7 +176,7 @@ export function AccountDialog({ open, onOpenChange }: AccountDialogProps) {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md">
+      <DialogContent className="max-h-[calc(100dvh-2rem)] max-w-md overflow-y-auto">
         <DialogHeader>
           <DialogTitle>{t("account.title")}</DialogTitle>
           <DialogDescription>
