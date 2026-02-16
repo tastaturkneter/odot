@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback, useEffect } from "react";
+import { useState, useMemo, useCallback, useEffect, useRef } from "react";
 import {
   DndContext,
   closestCenter,
@@ -26,6 +26,8 @@ import type { TodoRow as TodoRowType } from "@/db/queries";
 import { KeyboardShortcutHandler } from "./KeyboardShortcutHandler";
 import type { PickerType } from "./TodoRow";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { ConfirmDeleteDialog } from "@/components/shared/ConfirmDeleteDialog";
+import { useTranslation } from "@/hooks/useTranslation";
 
 interface TodoListProps {
   todos: TodoRowType[];
@@ -37,6 +39,7 @@ export function TodoList({
   emptyMessage = "No todos",
 }: TodoListProps) {
   const { toggleComplete, deleteTodo, updateTodo } = useTodoActions();
+  const t = useTranslation();
   // Preload checklist items so TodoDetail doesn't trigger Suspense on first open
   useQuery(allChecklistItems);
   const {
@@ -52,6 +55,8 @@ export function TodoList({
   } = useSelection();
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [pickerToOpen, setPickerToOpen] = useState<PickerType | null>(null);
+  const [confirmDeleteIds, setConfirmDeleteIds] = useState<string[] | null>(null);
+  const pendingDeleteRef = useRef<string[]>([]);
   const isDesktop = useMediaQuery("(min-width: 768px)");
 
   const orderedIds = useMemo(() => todos.map((t) => t.id), [todos]);
@@ -163,9 +168,10 @@ export function TodoList({
         }
       },
       deleteSelected: () => {
-        for (const id of selectedIds) {
-          deleteTodo(id);
-        }
+        const ids = [...selectedIds];
+        if (ids.length === 0) return;
+        pendingDeleteRef.current = ids;
+        setConfirmDeleteIds(ids);
       },
       deselect: () => {
         setExpandedId(null);
@@ -247,7 +253,10 @@ export function TodoList({
                   todo={todo}
                   isSelected={selectedIds.has(todo.id)}
                   onToggleComplete={handleToggleComplete}
-                  onDelete={deleteTodo}
+                  onDelete={(id) => {
+                    pendingDeleteRef.current = [id];
+                    setConfirmDeleteIds([id]);
+                  }}
                   onClick={(e) => handleClick(todo.id, e)}
                   onDoubleClick={() => handleDoubleClick(todo.id)}
                   openPicker={
@@ -261,6 +270,20 @@ export function TodoList({
           </div>
         </SortableContext>
       </DndContext>
+      <ConfirmDeleteDialog
+        open={confirmDeleteIds !== null}
+        onOpenChange={(open) => {
+          if (!open) setConfirmDeleteIds(null);
+        }}
+        title={t("confirm.deleteTodo")}
+        description={t("confirm.deleteTodoDesc")}
+        onConfirm={() => {
+          for (const id of pendingDeleteRef.current) {
+            deleteTodo(id);
+          }
+          setConfirmDeleteIds(null);
+        }}
+      />
     </TodoListContext>
   );
 }

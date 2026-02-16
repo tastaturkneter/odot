@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo, type ChangeEvent } from "react";
+import { ConfirmDeleteDialog } from "@/components/shared/ConfirmDeleteDialog";
 import { useQuery } from "@evolu/react";
 import { allTodos, allProjects, allAreas } from "@/db/queries";
 import type { ProjectRow } from "@/db/queries";
@@ -38,6 +39,7 @@ export function AreaView({ areaId }: { areaId: string }) {
 
   const area = areas.find((a) => a.id === areaId);
 
+  const [confirmDeleteArea, setConfirmDeleteArea] = useState(false);
   const [areaNotes, setAreaNotes] = useState(area?.notes ?? "");
   useEffect(() => {
     setAreaNotes(area?.notes ?? "");
@@ -122,10 +124,7 @@ export function AreaView({ areaId }: { areaId: string }) {
         <Button
           size="sm"
           variant="ghost"
-          onClick={() => {
-            deleteArea(areaId);
-            setActiveView({ kind: "inbox" });
-          }}
+          onClick={() => setConfirmDeleteArea(true)}
           title={t("view.deleteArea")}
         >
           <Trash2 className="h-4 w-4 text-muted-foreground hover:text-destructive" />
@@ -172,6 +171,17 @@ export function AreaView({ areaId }: { areaId: string }) {
           </SortableContext>
         </DndContext>
       )}
+
+      <ConfirmDeleteDialog
+        open={confirmDeleteArea}
+        onOpenChange={setConfirmDeleteArea}
+        title={t("confirm.deleteArea")}
+        description={t("confirm.deleteAreaDesc")}
+        onConfirm={() => {
+          deleteArea(areaId);
+          setActiveView({ kind: "inbox" });
+        }}
+      />
     </div>
   );
 }

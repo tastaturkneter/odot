@@ -242,6 +242,18 @@ const en = {
   "deadline.friday": "Friday",
   "deadline.saturday": "Saturday",
   "deadline.sunday": "Sunday",
+
+  // Confirm dialogs
+  "confirm.cancel": "Cancel",
+  "confirm.delete": "Delete",
+  "confirm.deleteTodo": "Delete this todo?",
+  "confirm.deleteTodoDesc": "This todo will be moved to trash.",
+  "confirm.deleteProject": "Delete this project?",
+  "confirm.deleteProjectDesc": "This project will be moved to trash.",
+  "confirm.deleteArea": "Delete this area?",
+  "confirm.deleteAreaDesc": "This area will be moved to trash.",
+  "confirm.deleteHeading": "Delete this heading?",
+  "confirm.deleteHeadingDesc": "This heading will be removed from the project.",
 } as const;
 
 export type TranslationKeys = keyof typeof en;

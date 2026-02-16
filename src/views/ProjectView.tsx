@@ -40,6 +40,7 @@ import { KeyboardShortcutHandler } from "@/components/todo/KeyboardShortcutHandl
 import { ProgressCircle } from "@/components/shared/ProgressCircle";
 import type { PickerType } from "@/components/todo/TodoRow";
 import { useTranslation } from "@/hooks/useTranslation";
+import { ConfirmDeleteDialog } from "@/components/shared/ConfirmDeleteDialog";
 
 // A project item is either a todo or a heading
 type ProjectItem =
@@ -165,6 +166,10 @@ export function ProjectView({ projectId }: { projectId: string }) {
   const [showCompleted, setShowCompleted] = useState(false);
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [pickerToOpen, setPickerToOpen] = useState<PickerType | null>(null);
+  const [confirmDeleteProject, setConfirmDeleteProject] = useState(false);
+  const [confirmDeleteHeadingId, setConfirmDeleteHeadingId] = useState<string | null>(null);
+  const [confirmDeleteIds, setConfirmDeleteIds] = useState<string[] | null>(null);
+  const pendingDeleteRef = useRef<string[]>([]);
 
   const todos = useQuery(allTodos);
   const projects = useQuery(allProjects);
@@ -359,9 +364,10 @@ export function ProjectView({ projectId }: { projectId: string }) {
         }
       },
       deleteSelected: () => {
-        for (const id of selectedIds) {
-          deleteTodo(id);
-        }
+        const ids = [...selectedIds];
+        if (ids.length === 0) return;
+        pendingDeleteRef.current = ids;
+        setConfirmDeleteIds(ids);
       },
       deselect: () => {
         setExpandedId(null);
@@ -429,10 +435,7 @@ export function ProjectView({ projectId }: { projectId: string }) {
         <Button
           size="sm"
           variant="ghost"
-          onClick={() => {
-            deleteProject(projectId);
-            setActiveView({ kind: "inbox" });
-          }}
+          onClick={() => setConfirmDeleteProject(true)}
           title={t("view.deleteProject")}
         >
           <Trash2 className="h-4 w-4 text-muted-foreground hover:text-destructive" />
@@ -472,7 +475,7 @@ export function ProjectView({ projectId }: { projectId: string }) {
                       <SortableHeadingRow
                         key={item.data.id}
                         heading={item.data}
-                        onDelete={deleteHeading}
+                        onDelete={(id) => setConfirmDeleteHeadingId(id)}
                         onUpdateTitle={(id, title) =>
                           updateHeading(id, { title })
                         }
@@ -499,7 +502,10 @@ export function ProjectView({ projectId }: { projectId: string }) {
                       todo={todo}
                       isSelected={selectedIds.has(todo.id)}
                       onToggleComplete={handleToggleComplete}
-                      onDelete={deleteTodo}
+                      onDelete={(id) => {
+                        pendingDeleteRef.current = [id];
+                        setConfirmDeleteIds([id]);
+                      }}
                       onClick={(e) => handleClick(todo.id, e)}
                       onDoubleClick={() => handleDoubleClick(todo.id)}
                       openPicker={
@@ -533,7 +539,10 @@ export function ProjectView({ projectId }: { projectId: string }) {
                   key={todo.id}
                   todo={todo}
                   onToggleComplete={handleToggleComplete}
-                  onDelete={deleteTodo}
+                  onDelete={(id) => {
+                    pendingDeleteRef.current = [id];
+                    setConfirmDeleteIds([id]);
+                  }}
                 />
               ))}
             </div>
@@ -546,6 +555,47 @@ export function ProjectView({ projectId }: { projectId: string }) {
         onOpenChange={setNewModalOpen}
         nextPosition={items.length}
         defaults={{ projectId }}
+      />
+
+      <ConfirmDeleteDialog
+        open={confirmDeleteProject}
+        onOpenChange={setConfirmDeleteProject}
+        title={t("confirm.deleteProject")}
+        description={t("confirm.deleteProjectDesc")}
+        onConfirm={() => {
+          deleteProject(projectId);
+          setActiveView({ kind: "inbox" });
+        }}
+      />
+
+      <ConfirmDeleteDialog
+        open={confirmDeleteHeadingId !== null}
+        onOpenChange={(open) => {
+          if (!open) setConfirmDeleteHeadingId(null);
+        }}
+        title={t("confirm.deleteHeading")}
+        description={t("confirm.deleteHeadingDesc")}
+        onConfirm={() => {
+          if (confirmDeleteHeadingId) {
+            deleteHeading(confirmDeleteHeadingId);
+          }
+          setConfirmDeleteHeadingId(null);
+        }}
+      />
+
+      <ConfirmDeleteDialog
+        open={confirmDeleteIds !== null}
+        onOpenChange={(open) => {
+          if (!open) setConfirmDeleteIds(null);
+        }}
+        title={t("confirm.deleteTodo")}
+        description={t("confirm.deleteTodoDesc")}
+        onConfirm={() => {
+          for (const id of pendingDeleteRef.current) {
+            deleteTodo(id);
+          }
+          setConfirmDeleteIds(null);
+        }}
       />
     </div>
   );

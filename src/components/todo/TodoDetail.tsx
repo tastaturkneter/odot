@@ -22,6 +22,7 @@ import { DeadlinePicker } from "@/components/shared/DeadlinePicker";
 import { ProjectPicker } from "@/components/shared/ProjectPicker";
 import { TagPicker } from "@/components/shared/TagPicker";
 import { RecurrencePicker } from "@/components/shared/RecurrencePicker";
+import { ConfirmDeleteDialog } from "@/components/shared/ConfirmDeleteDialog";
 import { ChecklistEditor } from "./ChecklistEditor";
 import { useTodoActions } from "@/hooks/useTodoActions";
 import { useSettings } from "@/hooks/useSettings";
@@ -51,6 +52,7 @@ export function TodoDetail({
 
   const [title, setTitle] = useState(todo.title ?? "");
   const [notes, setNotes] = useState(todo.notes ?? "");
+  const [confirmDelete, setConfirmDelete] = useState(false);
 
   const completed = todo.isCompleted === 1;
   const hasWhen = todo.whenDate !== null;
@@ -142,10 +144,7 @@ export function TodoDetail({
         <button
           className="shrink-0 rounded p-1 text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
           title={t("todo.delete")}
-          onClick={() => {
-            deleteTodo(todo.id);
-            onCollapse();
-          }}
+          onClick={() => setConfirmDelete(true)}
         >
           <Trash2 className="h-4 w-4" />
         </button>
@@ -289,6 +288,17 @@ export function TodoDetail({
           }
         />
       </div>
+
+      <ConfirmDeleteDialog
+        open={confirmDelete}
+        onOpenChange={setConfirmDelete}
+        title={t("confirm.deleteTodo")}
+        description={t("confirm.deleteTodoDesc")}
+        onConfirm={() => {
+          deleteTodo(todo.id);
+          onCollapse();
+        }}
+      />
     </div>
   );
 }
