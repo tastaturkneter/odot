@@ -18,7 +18,7 @@ import {
   Archive,
 } from "lucide-react";
 import { useQuery, useEvoluError } from "@evolu/react";
-import { allProjects, allAreas, allTags, allTodoTags, deletedTodos } from "@/db/queries";
+import { allProjects, allAreas, allTags, allTodoTags } from "@/db/queries";
 import { useActiveTodos } from "@/hooks/useActiveTodos";
 import { useActiveView } from "@/hooks/useActiveView";
 import { useProjectActions } from "@/hooks/useProjectActions";
@@ -146,7 +146,6 @@ export function Sidebar() {
   const areas = useQuery(allAreas);
   const tags = useQuery(allTags);
   const todoTags = useQuery(allTodoTags);
-  const trashedTodos = useQuery(deletedTodos);
 
   const [addingArea, setAddingArea] = useState(false);
   const [addingProjectInArea, setAddingProjectInArea] = useState<string | null>(null);
@@ -578,7 +577,6 @@ export function Sidebar() {
             icon={Trash2}
             label={t("sidebar.trash")}
             color="#6b7280"
-            count={trashedTodos.length}
             isActive={isActive({ kind: "trash" })}
             onClick={() => setActiveView({ kind: "trash" })}
           />
