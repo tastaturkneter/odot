@@ -1,4 +1,4 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useCallback } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
 import {
@@ -67,6 +67,20 @@ export function TodoRow({
   const projectRef = useRef<HTMLButtonElement>(null);
   const tagRef = useRef<HTMLButtonElement>(null);
   const rowRef = useRef<HTMLDivElement>(null);
+  const lastTapRef = useRef<number>(0);
+
+  const handleTouchEnd = useCallback(
+    (e: React.TouchEvent) => {
+      if ((e.target as HTMLElement).closest('button, input, [role="checkbox"]')) return;
+      const now = Date.now();
+      if (now - lastTapRef.current < 300) {
+        e.preventDefault();
+        onDoubleClick?.();
+      }
+      lastTapRef.current = now;
+    },
+    [onDoubleClick],
+  );
 
   // Programmatically open picker via keyboard shortcut
   useEffect(() => {
@@ -159,6 +173,7 @@ export function TodoRow({
       }}
       onClick={(e) => { e.stopPropagation(); onClick?.(e); }}
       onDoubleClick={() => onDoubleClick?.()}
+      onTouchEnd={handleTouchEnd}
     >
       <button
         ref={dragHandleRef}
