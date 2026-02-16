@@ -72,9 +72,10 @@ export function UpcomingView() {
   const { get, set } = useSettings();
   const todos = useActiveTodos();
 
+  const keepVisible = get("completedVisibility") === "show";
   const savedRange = get("upcomingRange");
   const daysAhead = savedRange ? parseInt(savedRange, 10) : 7;
-  const filtered = filterUpcoming([...todos], daysAhead, showCompleted);
+  const filtered = filterUpcoming([...todos], daysAhead, keepVisible || showCompleted);
   const slots = buildDaySlots(filtered, daysAhead);
 
   return (
@@ -96,14 +97,16 @@ export function UpcomingView() {
             </button>
           ))}
         </div>
-        <Button
-          size="sm"
-          variant="ghost"
-          onClick={() => setShowCompleted((v) => !v)}
-          title={showCompleted ? t("view.hideCompleted") : t("view.showCompleted")}
-        >
-          {showCompleted ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-        </Button>
+        {!keepVisible && (
+          <Button
+            size="sm"
+            variant="ghost"
+            onClick={() => setShowCompleted((v) => !v)}
+            title={showCompleted ? t("view.hideCompleted") : t("view.showCompleted")}
+          >
+            {showCompleted ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+          </Button>
+        )}
         <Button size="sm" variant="ghost" onClick={() => setNewModalOpen(true)}>
           <Plus className="mr-1 h-4 w-4" />
           {t("view.new")}

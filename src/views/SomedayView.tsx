@@ -7,26 +7,31 @@ import { NewTodoModal } from "@/components/todo/NewTodoModal";
 import { Button } from "@/components/ui/button";
 import { Plus, Eye, EyeOff, Clock } from "lucide-react";
 import { useActiveView } from "@/hooks/useActiveView";
+import { useSettings } from "@/hooks/useSettings";
 import { useTranslation } from "@/hooks/useTranslation";
 
 export function SomedayView() {
   const t = useTranslation();
   const { newModalOpen, setNewModalOpen } = useActiveView();
+  const { get } = useSettings();
+  const keepVisible = get("completedVisibility") === "show";
   const [showCompleted, setShowCompleted] = useState(false);
   const todos = useActiveTodos();
-  const filtered = filterSomeday([...todos], showCompleted);
+  const filtered = filterSomeday([...todos], keepVisible || showCompleted);
 
   return (
     <div>
       <ViewHeader title={t("sidebar.someday")} icon={<Clock className="h-6 w-6" style={{ color: "#a78bfa" }} />}>
-        <Button
-          size="sm"
-          variant="ghost"
-          onClick={() => setShowCompleted((v) => !v)}
-          title={showCompleted ? t("view.hideCompleted") : t("view.showCompleted")}
-        >
-          {showCompleted ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-        </Button>
+        {!keepVisible && (
+          <Button
+            size="sm"
+            variant="ghost"
+            onClick={() => setShowCompleted((v) => !v)}
+            title={showCompleted ? t("view.hideCompleted") : t("view.showCompleted")}
+          >
+            {showCompleted ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+          </Button>
+        )}
         <Button size="sm" variant="ghost" onClick={() => setNewModalOpen(true)}>
           <Plus className="mr-1 h-4 w-4" />
           {t("view.new")}

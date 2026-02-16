@@ -147,8 +147,35 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
           <Separator />
 
           {/* Behavior */}
-          <div>
+          <div className="space-y-3">
             <h3 className="mb-2 text-sm font-medium">{t("settings.behavior")}</h3>
+
+            {/* Completed todos visibility */}
+            <div>
+              <p className="mb-1 text-sm">{t("settings.completedTodos")}</p>
+              <p className="mb-2 text-xs text-muted-foreground">
+                {t("settings.completedDescription")}
+              </p>
+              <div className="flex items-center justify-center gap-0.5 rounded-md border p-0.5">
+                {([
+                  { value: "hide", label: t("settings.completedHide") },
+                  { value: "show", label: t("settings.completedShow") },
+                ] as const).map((opt) => (
+                  <button
+                    key={opt.value}
+                    className={`flex flex-1 items-center justify-center rounded px-2 py-1.5 text-sm transition-colors ${
+                      (get("completedVisibility") ?? "hide") === opt.value
+                        ? "bg-accent text-accent-foreground"
+                        : "text-muted-foreground hover:text-foreground"
+                    }`}
+                    onClick={() => set("completedVisibility", opt.value)}
+                  >
+                    {opt.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
             <label className="flex items-center justify-between gap-3 rounded-md border px-3 py-2">
               <div>
                 <p className="text-sm">{t("settings.autoCompleteTodos")}</p>

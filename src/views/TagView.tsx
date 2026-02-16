@@ -9,30 +9,35 @@ import { NewTodoModal } from "@/components/todo/NewTodoModal";
 import { Button } from "@/components/ui/button";
 import { Plus, Eye, EyeOff, Tag } from "lucide-react";
 import { useActiveView } from "@/hooks/useActiveView";
+import { useSettings } from "@/hooks/useSettings";
 import { useTranslation } from "@/hooks/useTranslation";
 
 export function TagView({ tagId }: { tagId: string }) {
   const t = useTranslation();
   const { newModalOpen, setNewModalOpen } = useActiveView();
+  const { get } = useSettings();
+  const keepVisible = get("completedVisibility") === "show";
   const [showCompleted, setShowCompleted] = useState(false);
   const todos = useActiveTodos();
   const tags = useQuery(allTags);
   const todoTags = useQuery(allTodoTags);
   const tag = tags.find((t) => t.id === tagId);
   const todoTagMap = buildTodoTagMap([...todoTags]);
-  const filtered = filterByTag([...todos], tagId, todoTagMap, showCompleted);
+  const filtered = filterByTag([...todos], tagId, todoTagMap, keepVisible || showCompleted);
 
   return (
     <div>
       <ViewHeader title={tag?.name ?? "Tag"} icon={<Tag className="h-6 w-6" style={{ color: tag?.color ?? undefined }} />}>
-        <Button
-          size="sm"
-          variant="ghost"
-          onClick={() => setShowCompleted((v) => !v)}
-          title={showCompleted ? t("view.hideCompleted") : t("view.showCompleted")}
-        >
-          {showCompleted ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-        </Button>
+        {!keepVisible && (
+          <Button
+            size="sm"
+            variant="ghost"
+            onClick={() => setShowCompleted((v) => !v)}
+            title={showCompleted ? t("view.hideCompleted") : t("view.showCompleted")}
+          >
+            {showCompleted ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+          </Button>
+        )}
         <Button size="sm" variant="ghost" onClick={() => setNewModalOpen(true)}>
           <Plus className="mr-1 h-4 w-4" />
           {t("view.new")}

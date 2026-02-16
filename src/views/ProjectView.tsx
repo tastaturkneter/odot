@@ -40,6 +40,7 @@ import { KeyboardShortcutHandler } from "@/components/todo/KeyboardShortcutHandl
 import { ProgressCircle } from "@/components/shared/ProgressCircle";
 import type { PickerType } from "@/components/todo/TodoRow";
 import { useTranslation } from "@/hooks/useTranslation";
+import { useSettings } from "@/hooks/useSettings";
 import { ConfirmDeleteDialog } from "@/components/shared/ConfirmDeleteDialog";
 
 // A project item is either a todo or a heading
@@ -163,6 +164,8 @@ export function ProjectView({ projectId }: { projectId: string }) {
   const { deleteProject, archiveProject, updateProject: updateProjectFields } = useProjectActions();
   const { toggleComplete, deleteTodo, updateTodo } = useTodoActions();
   const { createHeading, updateHeading, deleteHeading } = useHeadingActions();
+  const { get: getSetting } = useSettings();
+  const keepVisible = getSetting("completedVisibility") === "show";
   const [showCompleted, setShowCompleted] = useState(false);
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [pickerToOpen, setPickerToOpen] = useState<PickerType | null>(null);
@@ -191,10 +194,10 @@ export function ProjectView({ projectId }: { projectId: string }) {
     }
   }
 
-  // Build the merged, sorted list of active items
+  // Build the merged, sorted list of items (include completed when keepVisible)
   const items: ProjectItem[] = useMemo(() => {
     const activeTodos: ProjectItem[] = [...todos]
-      .filter((t) => t.projectId === projectId && t.isCompleted === 0)
+      .filter((t) => t.projectId === projectId && (keepVisible || t.isCompleted === 0))
       .map((data) => ({ kind: "todo" as const, data }));
 
     const activeHeadings: ProjectItem[] = [...headings]
@@ -204,7 +207,7 @@ export function ProjectView({ projectId }: { projectId: string }) {
     return [...activeTodos, ...activeHeadings].sort(
       (a, b) => (getItemPosition(a) ?? 0) - (getItemPosition(b) ?? 0),
     );
-  }, [todos, headings, projectId]);
+  }, [todos, headings, projectId, keepVisible]);
 
   // Only todos participate in selection
   const todoItems = useMemo(
@@ -533,7 +536,7 @@ export function ProjectView({ projectId }: { projectId: string }) {
         )}
       </TodoListContext>
 
-      {completedCount > 0 && (
+      {!keepVisible && completedCount > 0 && (
         <div className="mt-8 px-4">
           <button
             className="text-sm text-muted-foreground hover:text-foreground transition-colors"
