@@ -565,6 +565,7 @@ export function ProjectView({ projectId }: { projectId: string }) {
       )}
 
       <NewTodoModal
+        key={projectId}
         open={newModalOpen}
         onOpenChange={setNewModalOpen}
         nextPosition={items.length}
