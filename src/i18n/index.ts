@@ -1,4 +1,5 @@
 import en, { type TranslationKeys, type Translations } from "./en";
+import de from "./de";
 
 declare global {
   interface Window {
@@ -8,10 +9,12 @@ declare global {
 
 const locales: Record<string, Translations> = {
   en,
+  de,
 };
 
 export const SUPPORTED_LOCALES = [
   { code: "en", label: "English" },
+  { code: "de", label: "Deutsch" },
 ] as const;
 
 export function resolveLocale(userSetting: string | null): string {
