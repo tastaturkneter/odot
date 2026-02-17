@@ -1,7 +1,8 @@
 import type { TodoRow, TodoTagRow } from "@/db/queries";
 
 function todayStr(): string {
-  return new Date().toISOString().slice(0, 10);
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 }
 
 export function buildTodoTagMap(
@@ -52,7 +53,7 @@ export function filterUpcoming(
   const today = todayStr();
   const end = new Date();
   end.setDate(end.getDate() + daysAhead);
-  const endStr = end.toISOString().slice(0, 10);
+  const endStr = `${end.getFullYear()}-${String(end.getMonth() + 1).padStart(2, "0")}-${String(end.getDate()).padStart(2, "0")}`;
   return todos.filter(
     (t) =>
       (showCompleted || t.isCompleted === 0) &&

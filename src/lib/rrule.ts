@@ -21,7 +21,7 @@ export function getNextOccurrence(
     const rule = RRule.fromString(`DTSTART:${formatRRuleDate(after)}\n${ensureRRulePrefix(ruleString)}`);
     const next = rule.after(after, false);
     if (!next) return null;
-    return next.toISOString().slice(0, 10);
+    return `${next.getFullYear()}-${String(next.getMonth() + 1).padStart(2, "0")}-${String(next.getDate()).padStart(2, "0")}`;
   } catch {
     return null;
   }

@@ -56,7 +56,8 @@ export async function exportData(): Promise<void> {
   const json = JSON.stringify(exportObj, null, 2);
   const blob = new Blob([json], { type: "application/json" });
   const url = URL.createObjectURL(blob);
-  const date = new Date().toISOString().slice(0, 10);
+  const now = new Date();
+  const date = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
   const a = document.createElement("a");
   a.href = url;
   a.download = `odot-export-${date}.json`;

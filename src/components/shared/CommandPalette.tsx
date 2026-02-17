@@ -264,7 +264,8 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
     } else if (todo.whenSomeday === 1) {
       setActiveView({ kind: "someday" });
     } else if (todo.whenDate !== null) {
-      const today = new Date().toISOString().slice(0, 10);
+      const d = new Date();
+      const today = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
       if (todo.whenDate <= today) {
         setActiveView({ kind: "today" });
       } else {

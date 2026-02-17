@@ -1,11 +1,18 @@
+export function dateToStr(date: Date): string {
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, "0");
+  const d = String(date.getDate()).padStart(2, "0");
+  return `${y}-${m}-${d}`;
+}
+
 export function todayStr(): string {
-  return new Date().toISOString().slice(0, 10);
+  return dateToStr(new Date());
 }
 
 export function tomorrowStr(): string {
   const d = new Date();
   d.setDate(d.getDate() + 1);
-  return d.toISOString().slice(0, 10);
+  return dateToStr(d);
 }
 
 export function thisWeekendStr(): string {
@@ -13,7 +20,7 @@ export function thisWeekendStr(): string {
   const day = d.getDay(); // 0=Sun, 6=Sat
   const daysUntilSat = day === 0 ? 6 : 6 - day;
   d.setDate(d.getDate() + daysUntilSat);
-  return d.toISOString().slice(0, 10);
+  return dateToStr(d);
 }
 
 export function nextWeekStr(): string {
@@ -21,11 +28,7 @@ export function nextWeekStr(): string {
   const day = d.getDay();
   const daysUntilMon = day === 0 ? 1 : 8 - day;
   d.setDate(d.getDate() + daysUntilMon);
-  return d.toISOString().slice(0, 10);
-}
-
-export function dateToStr(date: Date): string {
-  return date.toISOString().slice(0, 10);
+  return dateToStr(d);
 }
 
 export function strToDate(str: string): Date {
@@ -53,7 +56,7 @@ export function isOverdue(dateStr: string): boolean {
 export function yesterdayStr(): string {
   const d = new Date();
   d.setDate(d.getDate() - 1);
-  return d.toISOString().slice(0, 10);
+  return dateToStr(d);
 }
 
 export function formatDateLabel(dateStr: string): string {
