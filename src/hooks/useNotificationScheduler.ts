@@ -46,19 +46,15 @@ export function useNotificationScheduler() {
 
       localStorage.setItem(STORAGE_KEY, String(now.getTime()));
 
-      for (const todo of scheduled) {
-        showNotification(t("notifications.scheduledTitle"), {
-          body: String(todo.title),
-          tag: `odot-scheduled-${todo.id}`,
-        });
+      const parts: string[] = [];
+      if (scheduled.length > 0) {
+        parts.push(t("notifications.scheduledBody", { count: String(scheduled.length) }));
+      }
+      if (deadlines.length > 0) {
+        parts.push(t("notifications.deadlineBody", { count: String(deadlines.length) }));
       }
 
-      for (const todo of deadlines) {
-        showNotification(t("notifications.deadlineTitle"), {
-          body: String(todo.title),
-          tag: `odot-deadline-${todo.id}`,
-        });
-      }
+      showNotification("odot", { body: parts.join("\n") });
     }
 
     checkAndNotify();

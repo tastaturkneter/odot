@@ -57,6 +57,7 @@ const en = {
   "settings.notificationsTime": "Earliest time",
   "settings.notificationsPermission": "Allow notifications",
   "settings.notificationsBlocked": "Notifications are blocked in your browser settings.",
+  "settings.notificationsTest": "Send test notification",
 
   // Account
   "account.title": "Account & Sync",
@@ -260,7 +261,9 @@ const en = {
 
   // Notifications
   "notifications.scheduledTitle": "Scheduled",
+  "notifications.scheduledBody": "{count} scheduled tasks",
   "notifications.deadlineTitle": "Due",
+  "notifications.deadlineBody": "{count} tasks due",
 
   // Confirm dialogs
   "confirm.cancel": "Cancel",

@@ -59,6 +59,7 @@ const de: Translations = {
   "settings.notificationsTime": "Früheste Uhrzeit",
   "settings.notificationsPermission": "Benachrichtigungen erlauben",
   "settings.notificationsBlocked": "Benachrichtigungen sind in deinen Browser-Einstellungen blockiert.",
+  "settings.notificationsTest": "Testbenachrichtigung senden",
 
   // Account
   "account.title": "Konto & Sync",
@@ -262,7 +263,9 @@ const de: Translations = {
 
   // Notifications
   "notifications.scheduledTitle": "Geplant",
+  "notifications.scheduledBody": "{count} geplante Aufgaben",
   "notifications.deadlineTitle": "Fällig",
+  "notifications.deadlineBody": "{count} fällige Aufgaben",
 
   // Confirm dialogs
   "confirm.cancel": "Abbrechen",

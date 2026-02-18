@@ -9,6 +9,7 @@ import {
   isSupported as notificationsSupported,
   getPermission,
   requestPermission,
+  showNotification,
 } from "@/lib/notifications";
 import {
   Dialog,
@@ -342,6 +343,18 @@ function NotificationSettings() {
           className="rounded border bg-transparent px-2 py-0.5 text-sm"
         />
       </div>
+
+      {/* Test button */}
+      {enabled && permission === "granted" && (
+        <button
+          className="w-full rounded-md border px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
+          onClick={() => {
+            showNotification("odot", { body: "Test notification" });
+          }}
+        >
+          {t("settings.notificationsTest")}
+        </button>
+      )}
     </div>
   );
 }
