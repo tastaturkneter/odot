@@ -503,7 +503,7 @@ export function Sidebar() {
         <h1 className="text-lg font-semibold text-sidebar-foreground">odot</h1>
       </div>
 
-      <ScrollArea className="flex-1 px-2">
+      <ScrollArea className="min-h-0 flex-1 px-2">
         <div className="space-y-0.5">
           <div {...viewDropHandlers("inbox")}>
             <SidebarItem
