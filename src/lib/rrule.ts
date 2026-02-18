@@ -11,17 +11,19 @@ export const RECURRENCE_PRESETS = [
 
 /**
  * Get the next occurrence date after the given date.
+ * Accepts a YYYY-MM-DD string to avoid local/UTC timezone shifts.
  * Returns an ISO date string (YYYY-MM-DD) or null if no more occurrences.
  */
 export function getNextOccurrence(
   ruleString: string,
-  after: Date = new Date(),
+  afterDateStr: string,
 ): string | null {
   try {
+    const after = new Date(afterDateStr + "T00:00:00Z");
     const rule = RRule.fromString(`DTSTART:${formatRRuleDate(after)}\n${ensureRRulePrefix(ruleString)}`);
     const next = rule.after(after, false);
     if (!next) return null;
-    return `${next.getFullYear()}-${String(next.getMonth() + 1).padStart(2, "0")}-${String(next.getDate()).padStart(2, "0")}`;
+    return `${next.getUTCFullYear()}-${String(next.getUTCMonth() + 1).padStart(2, "0")}-${String(next.getUTCDate()).padStart(2, "0")}`;
   } catch {
     return null;
   }

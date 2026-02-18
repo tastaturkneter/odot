@@ -50,6 +50,13 @@ const en = {
   "settings.autoCompleteTodos": "Auto-complete todos",
   "settings.autoCompleteDescription": "Complete a todo when all its checklist items are checked.",
   "settings.language": "Language",
+  "settings.notifications": "Notifications",
+  "settings.notificationsDescription": "Get reminded about scheduled todos and deadlines.",
+  "settings.notificationsEnable": "Enable notifications",
+  "settings.notificationsFrequency": "Frequency",
+  "settings.notificationsTime": "Earliest time",
+  "settings.notificationsPermission": "Allow notifications",
+  "settings.notificationsBlocked": "Notifications are blocked in your browser settings.",
 
   // Account
   "account.title": "Account & Sync",
@@ -250,6 +257,10 @@ const en = {
   "deadline.friday": "Friday",
   "deadline.saturday": "Saturday",
   "deadline.sunday": "Sunday",
+
+  // Notifications
+  "notifications.scheduledTitle": "Scheduled",
+  "notifications.deadlineTitle": "Due",
 
   // Confirm dialogs
   "confirm.cancel": "Cancel",

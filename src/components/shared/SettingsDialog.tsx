@@ -1,9 +1,15 @@
-import { Sun, Moon, Monitor } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Sun, Moon, Monitor, Bell } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useTheme, type Theme } from "@/hooks/useTheme";
 import { useSettings } from "@/hooks/useSettings";
 import { useTranslation } from "@/hooks/useTranslation";
 import { SUPPORTED_LOCALES } from "@/i18n";
+import {
+  isSupported as notificationsSupported,
+  getPermission,
+  requestPermission,
+} from "@/lib/notifications";
 import {
   Dialog,
   DialogContent,
@@ -211,6 +217,13 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
             </label>
           </div>
 
+          {notificationsSupported() && (
+            <>
+              <Separator />
+              <NotificationSettings />
+            </>
+          )}
+
           <Separator />
 
           <p className="text-center text-[11px] text-muted-foreground">
@@ -219,5 +232,116 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
         </div>
       </DialogContent>
     </Dialog>
+  );
+}
+
+function NotificationSettings() {
+  const { get, set } = useSettings();
+  const t = useTranslation();
+  const [permission, setPermission] = useState(getPermission);
+
+  const enabled = get("notificationsEnabled") === "1";
+  const notificationTime = get("notificationTime") ?? "09:00";
+
+  useEffect(() => {
+    setPermission(getPermission());
+  }, [enabled]);
+
+  async function handleToggle() {
+    if (!enabled) {
+      if (getPermission() === "default") {
+        const result = await requestPermission();
+        setPermission(result);
+        if (result !== "granted") return;
+      } else if (getPermission() === "denied") {
+        return;
+      }
+      set("notificationsEnabled", "1");
+    } else {
+      set("notificationsEnabled", "0");
+    }
+  }
+
+  return (
+    <div className="space-y-3">
+      <h3 className="mb-2 text-sm font-medium">
+        <Bell className="mr-1.5 inline-block h-3.5 w-3.5" />
+        {t("settings.notifications")}
+      </h3>
+      <p className="text-xs text-muted-foreground">
+        {t("settings.notificationsDescription")}
+      </p>
+
+      {/* Enable toggle */}
+      <label className="flex items-center justify-between gap-3 rounded-md border px-3 py-2">
+        <p className="text-sm">{t("settings.notificationsEnable")}</p>
+        <button
+          role="switch"
+          aria-checked={enabled}
+          onClick={handleToggle}
+          className={cn(
+            "relative inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-full transition-colors",
+            enabled ? "bg-primary" : "bg-muted",
+          )}
+        >
+          <span
+            className={cn(
+              "pointer-events-none block h-4 w-4 rounded-full bg-background shadow-sm transition-transform",
+              enabled ? "translate-x-[18px]" : "translate-x-0.5",
+            )}
+          />
+        </button>
+      </label>
+
+      {/* Permission hint */}
+      {enabled && permission === "denied" && (
+        <p className="text-xs text-destructive">
+          {t("settings.notificationsBlocked")}
+        </p>
+      )}
+
+      {/* Frequency */}
+      <div className={cn(!enabled && "opacity-50")}>
+        <p className="mb-2 text-sm">{t("settings.notificationsFrequency")}</p>
+        <div className="flex items-center justify-center gap-0.5 rounded-md border p-0.5">
+          {([
+            { value: "1", label: "1h" },
+            { value: "2", label: "2h" },
+            { value: "6", label: "6h" },
+            { value: "24", label: "24h" },
+          ] as const).map((opt) => (
+            <button
+              key={opt.value}
+              disabled={!enabled}
+              className={`flex flex-1 items-center justify-center rounded px-2 py-1.5 text-sm transition-colors ${
+                (get("notificationFrequency") ?? "24") === opt.value
+                  ? "bg-accent text-accent-foreground"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
+              onClick={() => set("notificationFrequency", opt.value)}
+            >
+              {opt.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Time picker */}
+      <div
+        className={cn(
+          "flex items-center justify-between gap-3 rounded-md border px-3 py-2",
+          !enabled && "opacity-50",
+        )}
+      >
+        <p className="text-sm">{t("settings.notificationsTime")}</p>
+        <input
+          type="time"
+          disabled={!enabled}
+          value={notificationTime}
+          onChange={(e) => set("notificationTime", e.target.value)}
+          className="rounded border bg-transparent px-2 py-0.5 text-sm"
+        />
+      </div>
+    </div>
   );
 }

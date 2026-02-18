@@ -52,6 +52,13 @@ const de: Translations = {
   "settings.autoCompleteTodos": "Todos automatisch erledigen",
   "settings.autoCompleteDescription": "Todo als erledigt markieren, wenn alle Checklisten-Punkte abgehakt sind.",
   "settings.language": "Sprache",
+  "settings.notifications": "Benachrichtigungen",
+  "settings.notificationsDescription": "Erinnerungen für geplante Todos und Fristen erhalten.",
+  "settings.notificationsEnable": "Benachrichtigungen aktivieren",
+  "settings.notificationsFrequency": "Häufigkeit",
+  "settings.notificationsTime": "Früheste Uhrzeit",
+  "settings.notificationsPermission": "Benachrichtigungen erlauben",
+  "settings.notificationsBlocked": "Benachrichtigungen sind in deinen Browser-Einstellungen blockiert.",
 
   // Account
   "account.title": "Konto & Sync",
@@ -252,6 +259,10 @@ const de: Translations = {
   "deadline.friday": "Freitag",
   "deadline.saturday": "Samstag",
   "deadline.sunday": "Sonntag",
+
+  // Notifications
+  "notifications.scheduledTitle": "Geplant",
+  "notifications.deadlineTitle": "Fällig",
 
   // Confirm dialogs
   "confirm.cancel": "Abbrechen",

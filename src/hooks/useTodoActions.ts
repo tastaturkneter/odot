@@ -1,5 +1,6 @@
 import { useEvolu } from "@/db/evolu";
 import { getNextOccurrence } from "@/lib/rrule";
+import { dateToStr } from "@/lib/dates";
 
 interface RecurringTodoData {
   title: string | null;
@@ -55,12 +56,10 @@ export function useTodoActions() {
       recurringData?.recurrenceRule &&
       recurringData.title
     ) {
-      const baseDate = recurringData.whenDate
-        ? new Date(recurringData.whenDate + "T00:00:00")
-        : new Date();
+      const baseDateStr = recurringData.whenDate ?? dateToStr(new Date());
       const nextDate = getNextOccurrence(
         recurringData.recurrenceRule,
-        baseDate,
+        baseDateStr,
       );
 
       if (nextDate) {
