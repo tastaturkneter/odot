@@ -42,6 +42,8 @@ const en = {
   "settings.dateFormatDescription": "Order for short date input in quick add (e.g. !15.3 or !3.15).",
   "settings.dayFirst": "Day first (EU)",
   "settings.monthFirst": "Month first (US)",
+  "settings.surpriseRange": "Surprise me",
+  "settings.surpriseRangeDescription": "Date range for the \"Surprise me\" option in the When picker.",
   "settings.behavior": "Behavior",
   "settings.completedTodos": "Completed todos",
   "settings.completedHide": "Hide",
@@ -164,9 +166,11 @@ const en = {
 
   // Pickers
   "picker.today": "Today",
+  "picker.thisEvening": "This Evening",
   "picker.tomorrow": "Tomorrow",
   "picker.thisWeekend": "This Weekend",
   "picker.nextWeek": "Next Week",
+  "picker.surpriseMe": "Surprise me",
   "picker.someday": "Someday",
   "picker.pickDate": "Pick a date...",
   "picker.clear": "Clear",
@@ -212,6 +216,7 @@ const en = {
 
   // View empty messages
   "view.inboxEmpty": "Inbox is empty. All clear!",
+  "view.todayEvening": "This Evening",
   "view.todayEmpty": "Nothing scheduled for today.",
   "view.somedayEmpty": "No someday items yet.",
   "view.logbookEmpty": "No completed todos yet.",
@@ -240,11 +245,18 @@ const en = {
   "create.area": "Area",
   "create.heading": "Heading",
 
+  // Date labels
+  "dates.today": "Today",
+  "dates.thisEvening": "This Evening",
+  "dates.tomorrow": "Tomorrow",
+  "dates.yesterday": "Yesterday",
+
   // App shell
   "app.loading": "Loading...",
 
   // Schedule/Deadline options (command palette)
   "schedule.today": "Today",
+  "schedule.tonight": "This Evening",
   "schedule.tomorrow": "Tomorrow",
   "schedule.weekend": "Weekend",
   "schedule.nextWeek": "Next Week",

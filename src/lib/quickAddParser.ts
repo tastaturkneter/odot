@@ -14,6 +14,7 @@ export interface ParsedQuickAdd {
   tagNames: string[];
   whenDate: string | null;
   whenSomeday: boolean;
+  whenEvening: boolean;
   deadline: string | null;
 }
 
@@ -62,20 +63,23 @@ function parseShortDate(
 function parseScheduleKeyword(
   keyword: string,
   dateFormat: "day-first" | "month-first" = "day-first",
-): { whenDate: string | null; whenSomeday: boolean } | null {
+): { whenDate: string | null; whenSomeday: boolean; whenEvening: boolean } | null {
   const lower = keyword.toLowerCase();
-  if (lower === "today") return { whenDate: todayStr(), whenSomeday: false };
+  if (lower === "tonight" || lower === "evening")
+    return { whenDate: todayStr(), whenSomeday: false, whenEvening: true };
+  if (lower === "today")
+    return { whenDate: todayStr(), whenSomeday: false, whenEvening: false };
   if (lower === "tomorrow")
-    return { whenDate: tomorrowStr(), whenSomeday: false };
+    return { whenDate: tomorrowStr(), whenSomeday: false, whenEvening: false };
   if (lower === "weekend")
-    return { whenDate: thisWeekendStr(), whenSomeday: false };
+    return { whenDate: thisWeekendStr(), whenSomeday: false, whenEvening: false };
   if (lower === "nextweek")
-    return { whenDate: nextWeekStr(), whenSomeday: false };
-  if (lower === "someday") return { whenDate: null, whenSomeday: true };
+    return { whenDate: nextWeekStr(), whenSomeday: false, whenEvening: false };
+  if (lower === "someday") return { whenDate: null, whenSomeday: true, whenEvening: false };
   if (/^\d{4}-\d{2}-\d{2}$/.test(lower))
-    return { whenDate: lower, whenSomeday: false };
+    return { whenDate: lower, whenSomeday: false, whenEvening: false };
   const shortDate = parseShortDate(keyword, dateFormat);
-  if (shortDate) return { whenDate: shortDate, whenSomeday: false };
+  if (shortDate) return { whenDate: shortDate, whenSomeday: false, whenEvening: false };
   return null;
 }
 
@@ -109,6 +113,7 @@ export function parseQuickAdd(
     tagNames: [],
     whenDate: null,
     whenSomeday: false,
+    whenEvening: false,
     deadline: null,
   };
 
@@ -120,6 +125,7 @@ export function parseQuickAdd(
     if (parsed) {
       result.whenDate = parsed.whenDate;
       result.whenSomeday = parsed.whenSomeday;
+      result.whenEvening = parsed.whenEvening;
       text =
         text.slice(0, scheduleMatch.index) +
         text.slice(scheduleMatch.index + scheduleMatch[0].length);

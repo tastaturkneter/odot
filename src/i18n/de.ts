@@ -44,6 +44,8 @@ const de: Translations = {
   "settings.dateFormatDescription": "Reihenfolge bei Kurzeingabe im Quick-Add (z.\u00a0B. !15.3 oder !3.15).",
   "settings.dayFirst": "Tag zuerst (EU)",
   "settings.monthFirst": "Monat zuerst (US)",
+  "settings.surpriseRange": "Überrasch mich",
+  "settings.surpriseRangeDescription": "Zeitraum für die \"Überrasch mich\"-Option in der Wann-Auswahl.",
   "settings.behavior": "Verhalten",
   "settings.completedTodos": "Erledigte Todos",
   "settings.completedHide": "Ausblenden",
@@ -166,9 +168,11 @@ const de: Translations = {
 
   // Pickers
   "picker.today": "Heute",
+  "picker.thisEvening": "Heute Abend",
   "picker.tomorrow": "Morgen",
   "picker.thisWeekend": "Dieses Wochenende",
   "picker.nextWeek": "Nächste Woche",
+  "picker.surpriseMe": "Überrasch mich",
   "picker.someday": "Irgendwann",
   "picker.pickDate": "Datum wählen...",
   "picker.clear": "Löschen",
@@ -214,6 +218,7 @@ const de: Translations = {
 
   // View empty messages
   "view.inboxEmpty": "Eingang ist leer. Alles erledigt!",
+  "view.todayEvening": "Heute Abend",
   "view.todayEmpty": "Nichts für heute geplant.",
   "view.somedayEmpty": "Noch keine Irgendwann-Einträge.",
   "view.logbookEmpty": "Noch keine erledigten Todos.",
@@ -242,11 +247,18 @@ const de: Translations = {
   "create.area": "Bereich",
   "create.heading": "Überschrift",
 
+  // Date labels
+  "dates.today": "Heute",
+  "dates.thisEvening": "Heute Abend",
+  "dates.tomorrow": "Morgen",
+  "dates.yesterday": "Gestern",
+
   // App shell
   "app.loading": "Laden...",
 
   // Schedule/Deadline options (command palette)
   "schedule.today": "Heute",
+  "schedule.tonight": "Heute Abend",
   "schedule.tomorrow": "Morgen",
   "schedule.weekend": "Wochenende",
   "schedule.nextWeek": "Nächste Woche",

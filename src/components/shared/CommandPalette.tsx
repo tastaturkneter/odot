@@ -39,6 +39,7 @@ import {
   Plus,
   CalendarClock,
   AlertCircle,
+  Sunset,
 } from "lucide-react";
 
 interface CommandPaletteProps {
@@ -104,6 +105,7 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
 
   const SCHEDULE_OPTIONS = useMemo(() => [
     { label: t("schedule.today"), keyword: "today" },
+    { label: t("schedule.tonight"), keyword: "tonight" },
     { label: t("schedule.tomorrow"), keyword: "tomorrow" },
     { label: t("schedule.weekend"), keyword: "weekend" },
     { label: t("schedule.nextWeek"), keyword: "nextweek" },
@@ -228,6 +230,7 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
     const updates: Record<string, unknown> = {};
     if (parsed.whenDate) updates.whenDate = parsed.whenDate;
     if (parsed.whenSomeday) updates.whenSomeday = 1;
+    if (parsed.whenEvening) updates.whenEvening = 1;
     if (parsed.deadline) updates.deadline = parsed.deadline;
     if (parsed.projectId) updates.projectId = parsed.projectId;
 
@@ -492,8 +495,12 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
                             variant="secondary"
                             className="text-xs shrink-0"
                           >
-                            <Calendar className="h-3 w-3" />
-                            {formatDateShort(parsed.whenDate)}
+                            {parsed.whenEvening ? (
+                              <Sunset className="h-3 w-3 text-blue-800 dark:text-blue-400" />
+                            ) : (
+                              <Calendar className="h-3 w-3" />
+                            )}
+                            {formatDateShort(parsed.whenDate, t, parsed.whenEvening)}
                           </Badge>
                         )}
                         {parsed.whenSomeday && (
@@ -510,7 +517,7 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
                             variant="secondary"
                             className="text-xs shrink-0"
                           >
-                            {t("todo.due", { date: formatDateShort(parsed.deadline) })}
+                            {t("todo.due", { date: formatDateShort(parsed.deadline, t) })}
                           </Badge>
                         )}
                       </div>

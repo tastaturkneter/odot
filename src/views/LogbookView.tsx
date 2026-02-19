@@ -39,7 +39,7 @@ export function LogbookView() {
           {grouped.map(([dateKey, dateTodos]) => (
             <div key={dateKey}>
               <h3 className="mb-1 px-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                {formatDateLabel(dateKey)}
+                {formatDateLabel(dateKey, t)}
               </h3>
               <TodoList todos={dateTodos} />
             </div>

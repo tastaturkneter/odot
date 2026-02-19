@@ -35,6 +35,7 @@ import { allProjects, allTags } from "@/db/queries";
 export interface NewTodoDefaults {
   whenDate?: string | null;
   whenSomeday?: boolean;
+  whenEvening?: boolean;
   deadline?: string | null;
   projectId?: string | null;
   tagIds?: string[];
@@ -67,6 +68,9 @@ export function NewTodoModal({
   const [whenSomeday, setWhenSomeday] = useState(
     defaults?.whenSomeday ?? false,
   );
+  const [whenEvening, setWhenEvening] = useState(
+    defaults?.whenEvening ?? false,
+  );
   const [deadline, setDeadline] = useState<string | null>(
     defaults?.deadline ?? null,
   );
@@ -83,6 +87,7 @@ export function NewTodoModal({
     setNotes("");
     setWhenDate(defaults?.whenDate ?? null);
     setWhenSomeday(defaults?.whenSomeday ?? false);
+    setWhenEvening(defaults?.whenEvening ?? false);
     setDeadline(defaults?.deadline ?? null);
     setProjectId(defaults?.projectId ?? null);
     setSelectedTagIds(new Set(defaults?.tagIds ?? []));
@@ -103,6 +108,7 @@ export function NewTodoModal({
     if (notes.trim()) updates.notes = notes.trim();
     if (whenDate) updates.whenDate = whenDate;
     if (whenSomeday) updates.whenSomeday = 1;
+    if (whenEvening) updates.whenEvening = 1;
     if (deadline) updates.deadline = deadline;
     if (projectId) updates.projectId = projectId;
     if (recurrenceRule) updates.recurrenceRule = recurrenceRule;
@@ -143,9 +149,11 @@ export function NewTodoModal({
   function handleWhenChange(value: {
     date: string | null;
     someday: boolean;
+    evening?: boolean;
   }) {
     setWhenDate(value.date);
     setWhenSomeday(value.someday);
+    setWhenEvening(value.evening ?? false);
   }
 
   function toggleTag(tagId: string) {
@@ -198,7 +206,7 @@ export function NewTodoModal({
           {/* Picker pills */}
           <div className="flex flex-wrap items-center gap-1.5">
             <WhenPicker
-              value={{ date: whenDate, someday: whenSomeday }}
+              value={{ date: whenDate, someday: whenSomeday, evening: whenEvening }}
               onChange={handleWhenChange}
               modal
             >
@@ -219,7 +227,7 @@ export function NewTodoModal({
                   <Sun className="h-3 w-3" />
                 )}
                 {whenDate
-                  ? formatDateShort(whenDate)
+                  ? formatDateShort(whenDate, t, whenEvening)
                   : whenSomeday
                     ? t("todo.someday")
                     : t("todo.when")}
@@ -237,7 +245,7 @@ export function NewTodoModal({
                 )}
               >
                 <CalendarClock className="h-3 w-3" />
-                {deadline ? formatDateShort(deadline) : t("todo.deadline")}
+                {deadline ? formatDateShort(deadline, t) : t("todo.deadline")}
               </button>
             </DeadlinePicker>
 

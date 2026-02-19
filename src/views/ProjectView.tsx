@@ -389,6 +389,7 @@ export function ProjectView({ projectId }: { projectId: string }) {
           updateTodo(id, {
             whenDate: null,
             whenSomeday: 1,
+            whenEvening: null,
           });
         }
       },

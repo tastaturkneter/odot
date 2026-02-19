@@ -9,10 +9,12 @@ import { Calendar } from "@/components/ui/calendar";
 import { Separator } from "@/components/ui/separator";
 import {
   Sun,
+  Sunset,
   ArrowRight,
   Palmtree,
   Calendar as CalendarIcon,
   Clock,
+  Shuffle,
   X,
 } from "lucide-react";
 import {
@@ -20,21 +22,24 @@ import {
   tomorrowStr,
   thisWeekendStr,
   nextWeekStr,
+  randomDateInRange,
   dateToStr,
   strToDate,
 } from "@/lib/dates";
 import { usePopoverKeyNav } from "@/hooks/usePopoverKeyNav";
 import { useTranslation } from "@/hooks/useTranslation";
+import { useSettings } from "@/hooks/useSettings";
 
 interface WhenPickerProps {
-  value: { date: string | null; someday: boolean };
-  onChange: (value: { date: string | null; someday: boolean }) => void;
+  value: { date: string | null; someday: boolean; evening?: boolean };
+  onChange: (value: { date: string | null; someday: boolean; evening?: boolean }) => void;
   children: React.ReactNode;
   modal?: boolean;
 }
 
 export function WhenPicker({ value, onChange, children, modal }: WhenPickerProps) {
   const t = useTranslation();
+  const { get } = useSettings();
   const [open, setOpen] = useState(false);
   const [showCalendar, setShowCalendar] = useState(false);
   const { listRef, handleKeyDown } = usePopoverKeyNav(open);
@@ -47,8 +52,8 @@ export function WhenPicker({ value, onChange, children, modal }: WhenPickerProps
     setShowCalendar(false);
   }
 
-  function pick(date: string | null, someday: boolean) {
-    onChange({ date, someday });
+  function pick(date: string | null, someday: boolean, evening?: boolean) {
+    onChange({ date, someday, evening });
     close();
   }
 
@@ -105,6 +110,12 @@ export function WhenPicker({ value, onChange, children, modal }: WhenPickerProps
         onClick={() => pick(todayStr(), false)}
       />
       <QuickOption
+        icon={<Sunset className="h-4 w-4 text-blue-800 dark:text-blue-400" />}
+        label={t("picker.thisEvening")}
+        detail={formatWeekday(todayStr())}
+        onClick={() => pick(todayStr(), false, true)}
+      />
+      <QuickOption
         icon={<ArrowRight className="h-4 w-4 text-orange-500" />}
         label={t("picker.tomorrow")}
         detail={formatWeekday(tomorrowStr())}
@@ -121,6 +132,14 @@ export function WhenPicker({ value, onChange, children, modal }: WhenPickerProps
         label={t("picker.nextWeek")}
         detail={formatWeekday(nextWeekStr())}
         onClick={() => pick(nextWeekStr(), false)}
+      />
+      <QuickOption
+        icon={<Shuffle className="h-4 w-4 text-purple-500" />}
+        label={t("picker.surpriseMe")}
+        onClick={() => {
+          const range = parseInt(get("surpriseRange") ?? "14", 10);
+          pick(randomDateInRange(range), false);
+        }}
       />
       <QuickOption
         icon={<Clock className="h-4 w-4 text-muted-foreground" />}

@@ -125,6 +125,36 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
 
           <Separator />
 
+          {/* Surprise me range */}
+          <div>
+            <h3 className="mb-2 text-sm font-medium">{t("settings.surpriseRange")}</h3>
+            <p className="mb-2 text-xs text-muted-foreground">
+              {t("settings.surpriseRangeDescription")}
+            </p>
+            <div className="flex items-center justify-center gap-0.5 rounded-md border p-0.5">
+              {([
+                { value: "7", label: "7d" },
+                { value: "14", label: "14d" },
+                { value: "30", label: "30d" },
+                { value: "90", label: "90d" },
+              ] as const).map((opt) => (
+                <button
+                  key={opt.value}
+                  className={`flex flex-1 items-center justify-center rounded px-2 py-1.5 text-sm transition-colors ${
+                    (get("surpriseRange") ?? "14") === opt.value
+                      ? "bg-accent text-accent-foreground"
+                      : "text-muted-foreground hover:text-foreground"
+                  }`}
+                  onClick={() => set("surpriseRange", opt.value)}
+                >
+                  {opt.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <Separator />
+
           {/* Date format */}
           <div>
             <h3 className="mb-2 text-sm font-medium">{t("settings.dateFormat")}</h3>

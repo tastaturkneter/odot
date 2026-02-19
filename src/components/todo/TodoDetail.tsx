@@ -5,6 +5,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import {
   Sun,
+  Sunset,
   CalendarClock,
   FolderOpen,
   Tag,
@@ -57,6 +58,7 @@ export function TodoDetail({
   const completed = todo.isCompleted === 1;
   const hasWhen = todo.whenDate !== null;
   const isSomeday = todo.whenSomeday === 1;
+  const isEvening = todo.whenEvening === 1;
   const hasDeadline = todo.deadline !== null;
   const overdue = hasWhen && isOverdue(todo.whenDate!);
 
@@ -88,10 +90,12 @@ export function TodoDetail({
   function handleWhenChange(value: {
     date: string | null;
     someday: boolean;
+    evening?: boolean;
   }) {
     updateTodo(todo.id, {
       whenDate: value.date,
       whenSomeday: value.someday ? 1 : null,
+      whenEvening: value.evening ? 1 : null,
     });
   }
 
@@ -163,6 +167,7 @@ export function TodoDetail({
           value={{
             date: todo.whenDate ?? null,
             someday: todo.whenSomeday === 1,
+            evening: todo.whenEvening === 1,
           }}
           onChange={handleWhenChange}
         >
@@ -180,13 +185,15 @@ export function TodoDetail({
               <AlertCircle className="h-3 w-3" />
             ) : isSomeday ? (
               <Clock className="h-3 w-3" />
+            ) : isEvening ? (
+              <Sunset className="h-3 w-3 text-blue-800 dark:text-blue-400" />
             ) : hasWhen ? (
               <Calendar className="h-3 w-3" />
             ) : (
               <Sun className="h-3 w-3" />
             )}
             {hasWhen
-              ? formatDateShort(todo.whenDate!)
+              ? formatDateShort(todo.whenDate!, t, isEvening)
               : isSomeday
                 ? t("todo.someday")
                 : t("todo.when")}
@@ -206,7 +213,7 @@ export function TodoDetail({
             )}
           >
             <CalendarClock className="h-3 w-3" />
-            {hasDeadline ? formatDateShort(todo.deadline!) : t("todo.deadline")}
+            {hasDeadline ? formatDateShort(todo.deadline!, t) : t("todo.deadline")}
           </button>
         </DeadlinePicker>
 

@@ -5,6 +5,7 @@ import {
   Calendar,
   AlertCircle,
   Sun,
+  Sunset,
   CalendarClock,
   Clock,
   FolderOpen,
@@ -107,6 +108,7 @@ export function TodoRow({
   const completed = todo.isCompleted === 1;
   const hasWhen = todo.whenDate !== null;
   const isSomeday = todo.whenSomeday === 1;
+  const isEvening = todo.whenEvening === 1;
   const hasDeadline = todo.deadline !== null;
   const hasProject = todo.projectId !== null;
   const overdue = hasWhen && isOverdue(todo.whenDate!);
@@ -124,10 +126,12 @@ export function TodoRow({
   function handleWhenChange(value: {
     date: string | null;
     someday: boolean;
+    evening?: boolean;
   }) {
     updateTodo(todo.id, {
       whenDate: value.date,
       whenSomeday: value.someday ? 1 : null,
+      whenEvening: value.evening ? 1 : null,
     });
   }
 
@@ -211,10 +215,12 @@ export function TodoRow({
               >
                 {overdue ? (
                   <AlertCircle className="h-3 w-3" />
+                ) : isEvening ? (
+                  <Sunset className="h-3 w-3 text-blue-800 dark:text-blue-400" />
                 ) : (
                   <Calendar className="h-3 w-3" />
                 )}
-                {formatDateShort(todo.whenDate!)}
+                {formatDateShort(todo.whenDate!, t, isEvening)}
               </span>
             )}
             {isSomeday && !hasWhen && (
@@ -226,7 +232,7 @@ export function TodoRow({
             {hasDeadline && (
               <span className="flex items-center gap-1 text-xs text-orange-500">
                 <CalendarClock className="h-3 w-3" />
-                {t("todo.due", { date: formatDateShort(todo.deadline!) })}
+                {t("todo.due", { date: formatDateShort(todo.deadline!, t) })}
               </span>
             )}
             {project && (
@@ -277,6 +283,7 @@ export function TodoRow({
             value={{
               date: todo.whenDate ?? null,
               someday: todo.whenSomeday === 1,
+              evening: todo.whenEvening === 1,
             }}
             onChange={handleWhenChange}
           >

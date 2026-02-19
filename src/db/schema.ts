@@ -40,6 +40,7 @@ const Schema = {
     notes: nullOr(String1000),
     whenDate: nullOr(String1000), // ISO date "YYYY-MM-DD"
     whenSomeday: nullOr(SqliteBoolean), // 1 = someday
+    whenEvening: nullOr(SqliteBoolean), // 1 = evening
     deadline: nullOr(String1000), // ISO date "YYYY-MM-DD"
     projectId: nullOr(ProjectId),
     position: Number,

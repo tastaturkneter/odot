@@ -210,22 +210,22 @@ export function Sidebar() {
     for (const id of todoIds) {
       switch (viewId) {
         case "inbox":
-          updateTodo(id, { whenDate: null, whenSomeday: null, projectId: null });
+          updateTodo(id, { whenDate: null, whenSomeday: null, whenEvening: null, projectId: null });
           break;
         case "today":
-          updateTodo(id, { whenDate: today, whenSomeday: null });
+          updateTodo(id, { whenDate: today, whenSomeday: null, whenEvening: null });
           break;
         case "upcoming": {
           const tomorrow = new Date();
           tomorrow.setDate(tomorrow.getDate() + 1);
-          updateTodo(id, { whenDate: tomorrow.toISOString().split("T")[0], whenSomeday: null });
+          updateTodo(id, { whenDate: tomorrow.toISOString().split("T")[0], whenSomeday: null, whenEvening: null });
           break;
         }
         case "anytime":
-          updateTodo(id, { whenDate: null, whenSomeday: null });
+          updateTodo(id, { whenDate: null, whenSomeday: null, whenEvening: null });
           break;
         case "someday":
-          updateTodo(id, { whenDate: null, whenSomeday: 1 });
+          updateTodo(id, { whenDate: null, whenSomeday: 1, whenEvening: null });
           break;
       }
     }

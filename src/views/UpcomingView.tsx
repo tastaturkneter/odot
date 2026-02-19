@@ -60,9 +60,9 @@ function buildDaySlots(todos: TodoRow[], daysAhead: number): DaySlot[] {
   return slots;
 }
 
-function emptyRangeLabel(from: string, to: string): string {
-  if (from === to) return formatDateLabel(from);
-  return `${formatDateLabel(from)} – ${formatDateLabel(to)}`;
+function emptyRangeLabel(from: string, to: string, t?: (key: string) => string): string {
+  if (from === to) return formatDateLabel(from, t);
+  return `${formatDateLabel(from, t)} – ${formatDateLabel(to, t)}`;
 }
 
 export function UpcomingView() {
@@ -117,7 +117,7 @@ export function UpcomingView() {
           slot.type === "day" ? (
             <div key={slot.dateKey}>
               <h3 className="flex items-center gap-2 px-2 pt-3 pb-1 text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                {formatDateLabel(slot.dateKey)}
+                {formatDateLabel(slot.dateKey, t)}
                 <span className="h-px flex-1 bg-border" />
               </h3>
               <TodoList todos={slot.todos} />
@@ -125,7 +125,7 @@ export function UpcomingView() {
           ) : (
             <div key={slot.from} className="flex items-center gap-2 px-2 pt-3 pb-1">
               <span className="text-xs italic text-muted-foreground/50">
-                {emptyRangeLabel(slot.from, slot.to)}
+                {emptyRangeLabel(slot.from, slot.to, t)}
               </span>
               <span className="h-px flex-1 bg-border" />
             </div>

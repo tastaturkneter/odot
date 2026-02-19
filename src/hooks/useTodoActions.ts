@@ -29,6 +29,7 @@ export function useTodoActions() {
       notes?: string | null;
       whenDate?: string | null;
       whenSomeday?: 0 | 1 | null;
+      whenEvening?: 0 | 1 | null;
       deadline?: string | null;
       projectId?: string | null;
       position?: number;

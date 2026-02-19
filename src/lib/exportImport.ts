@@ -148,6 +148,7 @@ export async function importData(json: string): Promise<number> {
       notes: todo.notes ?? null,
       whenDate: todo.whenDate ?? null,
       whenSomeday: todo.whenSomeday ?? null,
+      whenEvening: todo.whenEvening ?? null,
       deadline: todo.deadline ?? null,
       position: todo.position ?? 0,
       isCompleted: todo.isCompleted ?? 0,

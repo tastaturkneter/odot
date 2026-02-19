@@ -32,11 +32,13 @@ import { useTranslation } from "@/hooks/useTranslation";
 interface TodoListProps {
   todos: TodoRowType[];
   emptyMessage?: string;
+  renderBeforeItem?: (todoId: string) => React.ReactNode | null;
 }
 
 export function TodoList({
   todos,
   emptyMessage = "No todos",
+  renderBeforeItem,
 }: TodoListProps) {
   const { toggleComplete, deleteTodo, updateTodo } = useTodoActions();
   const t = useTranslation();
@@ -192,6 +194,7 @@ export function TodoList({
           updateTodo(id, {
             whenDate: null,
             whenSomeday: 1,
+            whenEvening: null,
           });
         }
       },
@@ -239,34 +242,35 @@ export function TodoList({
           strategy={verticalListSortingStrategy}
         >
           <div className="space-y-0.5">
-            {todos.map((todo) =>
-              expandedId === todo.id ? (
-                <TodoDetail
-                  key={todo.id}
-                  todo={todo}
-                  onToggleComplete={handleToggleComplete}
-                  onCollapse={() => setExpandedId(null)}
-                />
-              ) : (
-                <SortableTodoRow
-                  key={todo.id}
-                  todo={todo}
-                  isSelected={selectedIds.has(todo.id)}
-                  onToggleComplete={handleToggleComplete}
-                  onDelete={(id) => {
-                    pendingDeleteRef.current = [id];
-                    setConfirmDeleteIds([id]);
-                  }}
-                  onClick={(e) => handleClick(todo.id, e)}
-                  onDoubleClick={() => handleDoubleClick(todo.id)}
-                  openPicker={
-                    cursorId === todo.id && isSingleSelection() ? pickerToOpen : null
-                  }
-                  onPickerOpened={handlePickerOpened}
-                  onNativeDragStart={(e) => handleNativeDragStart(todo.id, e)}
-                />
-              ),
-            )}
+            {todos.map((todo) => (
+              <div key={todo.id}>
+                {renderBeforeItem?.(todo.id)}
+                {expandedId === todo.id ? (
+                  <TodoDetail
+                    todo={todo}
+                    onToggleComplete={handleToggleComplete}
+                    onCollapse={() => setExpandedId(null)}
+                  />
+                ) : (
+                  <SortableTodoRow
+                    todo={todo}
+                    isSelected={selectedIds.has(todo.id)}
+                    onToggleComplete={handleToggleComplete}
+                    onDelete={(id) => {
+                      pendingDeleteRef.current = [id];
+                      setConfirmDeleteIds([id]);
+                    }}
+                    onClick={(e) => handleClick(todo.id, e)}
+                    onDoubleClick={() => handleDoubleClick(todo.id)}
+                    openPicker={
+                      cursorId === todo.id && isSingleSelection() ? pickerToOpen : null
+                    }
+                    onPickerOpened={handlePickerOpened}
+                    onNativeDragStart={(e) => handleNativeDragStart(todo.id, e)}
+                  />
+                )}
+              </div>
+            ))}
           </div>
         </SortableContext>
       </DndContext>

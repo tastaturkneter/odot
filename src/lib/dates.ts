@@ -35,12 +35,19 @@ export function strToDate(str: string): Date {
   return new Date(str + "T00:00:00");
 }
 
-export function formatDateShort(dateStr: string): string {
+type TranslateFn = (key: string) => string;
+
+export function formatDateShort(
+  dateStr: string,
+  t?: TranslateFn,
+  evening?: boolean,
+): string {
   const today = todayStr();
   const tomorrow = tomorrowStr();
 
-  if (dateStr === today) return "Today";
-  if (dateStr === tomorrow) return "Tomorrow";
+  if (dateStr === today && evening && t) return t("dates.thisEvening");
+  if (dateStr === today) return t ? t("dates.today") : "Today";
+  if (dateStr === tomorrow) return t ? t("dates.tomorrow") : "Tomorrow";
 
   const date = strToDate(dateStr);
   return date.toLocaleDateString(undefined, {
@@ -59,14 +66,21 @@ export function yesterdayStr(): string {
   return dateToStr(d);
 }
 
-export function formatDateLabel(dateStr: string): string {
+export function randomDateInRange(days: number): string {
+  const d = new Date();
+  const offset = Math.floor(Math.random() * days) + 1;
+  d.setDate(d.getDate() + offset);
+  return dateToStr(d);
+}
+
+export function formatDateLabel(dateStr: string, t?: TranslateFn): string {
   const today = todayStr();
   const yesterday = yesterdayStr();
   const tomorrow = tomorrowStr();
 
-  if (dateStr === today) return "Today";
-  if (dateStr === yesterday) return "Yesterday";
-  if (dateStr === tomorrow) return "Tomorrow";
+  if (dateStr === today) return t ? t("dates.today") : "Today";
+  if (dateStr === yesterday) return t ? t("dates.yesterday") : "Yesterday";
+  if (dateStr === tomorrow) return t ? t("dates.tomorrow") : "Tomorrow";
 
   const date = strToDate(dateStr);
   return date.toLocaleDateString(undefined, {
