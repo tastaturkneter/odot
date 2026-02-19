@@ -60,7 +60,7 @@ function buildDaySlots(todos: TodoRow[], daysAhead: number): DaySlot[] {
   return slots;
 }
 
-function emptyRangeLabel(from: string, to: string, t?: (key: string) => string): string {
+function emptyRangeLabel(from: string, to: string, t?: (key: any) => string): string {
   if (from === to) return formatDateLabel(from, t);
   return `${formatDateLabel(from, t)} – ${formatDateLabel(to, t)}`;
 }
