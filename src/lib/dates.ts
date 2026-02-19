@@ -35,7 +35,8 @@ export function strToDate(str: string): Date {
   return new Date(str + "T00:00:00");
 }
 
-type TranslateFn = (key: string) => string;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type TranslateFn = (key: any) => string;
 
 export function formatDateShort(
   dateStr: string,
