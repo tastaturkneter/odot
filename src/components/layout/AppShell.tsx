@@ -57,7 +57,7 @@ export function AppShell() {
   const t = useTranslation();
 
   return (
-    <div className="flex h-screen overflow-hidden">
+    <div className="flex h-screen overflow-hidden pb-[env(safe-area-inset-bottom)] pt-[env(safe-area-inset-top)]">
       {isDesktop ? (
         <Suspense>
           <Sidebar />
