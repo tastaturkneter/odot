@@ -836,7 +836,7 @@ export function Sidebar() {
         </div>
       </ScrollArea>
 
-      <div className="flex items-center justify-between border-t border-sidebar-border px-3 py-2">
+      <div className="flex items-center justify-between border-t border-sidebar-border px-3 pt-2 pb-[max(0.5rem,env(safe-area-inset-bottom))]">
         <button
           className="flex items-center gap-2 rounded px-2 py-1 text-xs text-muted-foreground hover:text-sidebar-foreground transition-colors"
           onClick={() => setAccountOpen(true)}
