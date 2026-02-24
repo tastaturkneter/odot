@@ -109,7 +109,7 @@ export function UpcomingView() {
         )}
         <Button size="sm" variant="ghost" onClick={() => setNewModalOpen(true)}>
           <Plus className="mr-1 h-4 w-4" />
-          {t("view.new")}
+          <span className="hidden sm:inline">{t("view.new")}</span>
         </Button>
       </ViewHeader>
       <div className="space-y-1">

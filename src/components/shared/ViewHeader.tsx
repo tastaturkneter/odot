@@ -28,7 +28,7 @@ export function ViewHeader({ title, icon, children, onTitleChange }: ViewHeaderP
   }
 
   return (
-    <div className="flex items-center justify-between px-2 pb-4">
+    <div className="flex flex-wrap items-center justify-between gap-y-2 px-2 pb-4">
       <div className="flex items-center gap-2">
         {icon}
         {editing ? (
