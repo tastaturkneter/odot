@@ -118,6 +118,7 @@ export function TodoDetail({
 
   return (
     <div
+      data-todo-item
       className="rounded-lg border bg-card px-2 py-3"
       onKeyDown={(e) => {
         if (e.key === "Escape") {

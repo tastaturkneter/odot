@@ -162,6 +162,7 @@ export function TodoRow({
   return (
     <div
       ref={rowRef}
+      data-todo-item
       className={cn(
         "group relative flex items-start gap-3 rounded-md px-2 py-2 transition-colors",
         "hover:bg-accent/50 select-none",

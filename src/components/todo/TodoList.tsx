@@ -68,6 +68,24 @@ export function TodoList({
     syncWithList(orderedIds);
   }, [orderedIds, syncWithList]);
 
+  // Deselect when clicking on empty space (like a file explorer)
+  useEffect(() => {
+    function handleClick(e: MouseEvent) {
+      const target = e.target as HTMLElement;
+      if (
+        target.closest("[data-todo-item]") ||
+        target.closest("[role='dialog']") ||
+        target.closest("[data-radix-popper-content-wrapper]")
+      ) {
+        return;
+      }
+      setExpandedId(null);
+      deselectAll();
+    }
+    document.addEventListener("click", handleClick, true);
+    return () => document.removeEventListener("click", handleClick, true);
+  }, [deselectAll]);
+
   const selectedTodo = useMemo(() => {
     const singleId = getSingleSelectedId();
     if (!singleId) return null;
