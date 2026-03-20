@@ -2,6 +2,25 @@
 
 A local-first, privacy-focused personal task manager. Your data stays on your device and syncs end-to-end encrypted across devices.
 
+## Screenshots
+
+| | |
+|---|---|
+| ![Today View](docs/screenshots/today.png) | ![Project View](docs/screenshots/project.png) |
+| Today view with scheduled todos and evening section | Project view with headings and progress tracking |
+| ![New Todo](docs/screenshots/modal.png) | ![Command Palette](docs/screenshots/command-palette.png) |
+| Create todos with dates, deadlines, projects and tags | Command palette for quick navigation and todo creation |
+| ![Inbox](docs/screenshots/inbox.png) | ![Areas & Projects](docs/screenshots/sidebar.png) |
+| Inbox for unsorted tasks | Areas to group related projects |
+| ![Setup Wizard](docs/screenshots/setup.png) | ![Onboarding Tour](docs/screenshots/tour.png) |
+| Setup wizard on first launch | Interactive onboarding tour |
+
+<p align="center">
+  <img src="docs/screenshots/mobile.png" alt="Mobile View" width="300" />
+  <br />
+  <em>Fully responsive mobile layout</em>
+</p>
+
 ## Features
 
 **Task Management**
