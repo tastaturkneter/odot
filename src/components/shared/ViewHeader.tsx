@@ -52,7 +52,7 @@ export function ViewHeader({ title, icon, children, onTitleChange }: ViewHeaderP
           </h2>
         )}
       </div>
-      {children && <div className="flex items-center gap-2">{children}</div>}
+      {children && <div className="flex items-center gap-2" data-tour="tour-new-button">{children}</div>}
     </div>
   );
 }

@@ -299,6 +299,27 @@ const en = {
   "setup.accountCopied": "Copied!",
   "setup.accountCopy": "Copy to clipboard",
 
+  // Onboarding tour
+  "tour.viewsTitle": "Your Views",
+  "tour.viewsDescription": "These are your smart views. Inbox collects new tasks, Today shows what's due, Upcoming plans ahead, and Someday stores ideas for later.",
+  "tour.createTitle": "Create Todos",
+  "tour.createDescription": "Click here or press N to create a new todo. You can also use Cmd+K for quick add with shortcuts like @project, #tag and !tomorrow.",
+  "tour.modalTitleTitle": "Todo Title",
+  "tour.modalTitleDescription": "Type your task here. Press Enter to save quickly, or Cmd+Enter to save and keep the dialog open.",
+  "tour.modalNotesTitle": "Notes",
+  "tour.modalNotesDescription": "Add extra details, links, or context. Notes are optional but help you remember the important bits.",
+  "tour.modalPickersTitle": "Schedule & Organize",
+  "tour.modalPickersDescription": "Set a date, deadline, project, tags, or repeat schedule. Click any pill to open its picker. You can also use keyboard shortcuts D, L, P, T on a selected todo.",
+  "tour.organizeTitle": "Workspace",
+  "tour.organizeDescription": "Create projects and areas to organize your tasks. Drag & drop todos from any view into projects in the sidebar.",
+  "tour.tagsTitle": "Tags",
+  "tour.tagsDescription": "Use tags to categorize tasks across projects. Assign multiple tags to a single todo for flexible filtering.",
+  "tour.accountTitle": "Account & Sync",
+  "tour.accountDescription": "Your data syncs end-to-end encrypted. Here you'll find your recovery phrase, data export/import, and sync server settings.",
+  "tour.settingsTitle": "Settings",
+  "tour.settingsDescription": "Customize language, theme, date format, notifications, and more. Press ? anytime to see all keyboard shortcuts.",
+  "tour.start": "Let's go!",
+
   // Confirm dialogs
   "confirm.cancel": "Cancel",
   "confirm.delete": "Delete",

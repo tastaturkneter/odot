@@ -184,6 +184,7 @@ export function NewTodoModal({
         </DialogHeader>
         <div className="space-y-3">
           <Input
+            data-tour="tour-modal-title"
             placeholder={t("newTodo.placeholder")}
             value={title}
             onChange={(e) => setTitle(e.target.value)}
@@ -197,6 +198,7 @@ export function NewTodoModal({
           />
 
           <Textarea
+            data-tour="tour-modal-notes"
             placeholder={t("newTodo.notesPlaceholder")}
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
@@ -204,7 +206,7 @@ export function NewTodoModal({
           />
 
           {/* Picker pills */}
-          <div className="flex flex-wrap items-center gap-1.5">
+          <div className="flex flex-wrap items-center gap-1.5" data-tour="tour-modal-pickers">
             <WhenPicker
               value={{ date: whenDate, someday: whenSomeday, evening: whenEvening }}
               onChange={handleWhenChange}

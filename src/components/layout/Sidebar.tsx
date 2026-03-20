@@ -504,7 +504,7 @@ export function Sidebar() {
       </div>
 
       <ScrollArea className="min-h-0 flex-1 px-2">
-        <div className="space-y-0.5">
+        <div className="space-y-0.5" data-tour="tour-sidebar-views">
           <div {...viewDropHandlers("inbox")}>
             <SidebarItem
               icon={Inbox}
@@ -585,7 +585,7 @@ export function Sidebar() {
         <Separator className="my-3" />
 
         {/* Workspace section */}
-        <div className="mb-1 px-2">
+        <div className="mb-1 px-2" data-tour="tour-workspace">
           <span className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
             {t("sidebar.workspace")}
           </span>
@@ -798,7 +798,7 @@ export function Sidebar() {
         <Separator className="my-3" />
 
         {/* Tags section */}
-        <div className="mb-1 flex items-center justify-between px-2">
+        <div className="mb-1 flex items-center justify-between px-2" data-tour="tour-tags">
           <span className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
             {t("sidebar.tags")}
           </span>
@@ -841,6 +841,7 @@ export function Sidebar() {
           className="flex items-center gap-2 rounded px-2 py-1 text-xs text-muted-foreground hover:text-sidebar-foreground transition-colors"
           onClick={() => setAccountOpen(true)}
           title={t("sidebar.accountAndSync")}
+          data-tour="tour-account"
         >
           <User className="h-3.5 w-3.5" />
           <span>{t("sidebar.account")}</span>
@@ -874,6 +875,7 @@ export function Sidebar() {
           className="rounded p-1 text-muted-foreground hover:text-sidebar-foreground transition-colors"
           onClick={() => setSettingsOpen(true)}
           title={t("sidebar.settings")}
+          data-tour="tour-settings"
         >
           <Settings className="h-3.5 w-3.5" />
         </button>

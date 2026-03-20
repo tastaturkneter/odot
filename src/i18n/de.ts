@@ -301,6 +301,27 @@ const de: Translations = {
   "setup.accountCopied": "Kopiert!",
   "setup.accountCopy": "In Zwischenablage kopieren",
 
+  // Onboarding tour
+  "tour.viewsTitle": "Deine Ansichten",
+  "tour.viewsDescription": "Das sind deine smarten Ansichten. Eingang sammelt neue Aufgaben, Heute zeigt Fälliges, Demnächst plant voraus, und Irgendwann speichert Ideen für später.",
+  "tour.createTitle": "Todos erstellen",
+  "tour.createDescription": "Klicke hier oder drücke N, um ein neues Todo zu erstellen. Du kannst auch Cmd+K für die Schnelleingabe mit Kürzeln wie @projekt, #tag und !morgen nutzen.",
+  "tour.modalTitleTitle": "Todo-Titel",
+  "tour.modalTitleDescription": "Gib deine Aufgabe hier ein. Drücke Enter zum schnellen Speichern oder Cmd+Enter zum Speichern bei geöffnetem Dialog.",
+  "tour.modalNotesTitle": "Notizen",
+  "tour.modalNotesDescription": "Füge Details, Links oder Kontext hinzu. Notizen sind optional, helfen aber die wichtigen Details im Blick zu behalten.",
+  "tour.modalPickersTitle": "Planen & Organisieren",
+  "tour.modalPickersDescription": "Setze Datum, Frist, Projekt, Tags oder Wiederholung. Klicke auf ein Feld, um die Auswahl zu öffnen. Du kannst auch die Tastenkürzel D, L, P, T auf einem ausgewählten Todo nutzen.",
+  "tour.organizeTitle": "Arbeitsbereich",
+  "tour.organizeDescription": "Erstelle Projekte und Bereiche, um deine Aufgaben zu organisieren. Ziehe Todos per Drag & Drop aus jeder Ansicht in Projekte in der Seitenleiste.",
+  "tour.tagsTitle": "Tags",
+  "tour.tagsDescription": "Nutze Tags, um Aufgaben projektübergreifend zu kategorisieren. Weise einem Todo mehrere Tags zu für flexible Filterung.",
+  "tour.accountTitle": "Konto & Sync",
+  "tour.accountDescription": "Deine Daten werden Ende-zu-Ende-verschlüsselt synchronisiert. Hier findest du deine Wiederherstellungsphrase, Datenexport/-import und Sync-Server-Einstellungen.",
+  "tour.settingsTitle": "Einstellungen",
+  "tour.settingsDescription": "Passe Sprache, Theme, Datumsformat, Benachrichtigungen und mehr an. Drücke jederzeit ? um alle Tastenkürzel zu sehen.",
+  "tour.start": "Los geht's!",
+
   // Confirm dialogs
   "confirm.cancel": "Abbrechen",
   "confirm.delete": "Löschen",

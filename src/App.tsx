@@ -8,8 +8,12 @@ import {
   SetupWizard,
   isSetupComplete,
 } from "@/components/shared/SetupWizard";
+import {
+  OnboardingTour,
+  isTourComplete,
+} from "@/components/shared/OnboardingTour";
 
-function MainApp() {
+function MainApp({ showTour, onTourComplete }: { showTour: boolean; onTourComplete: () => void }) {
   const [activeView, setActiveView] = useViewRouter();
   const [newModalOpen, setNewModalOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
@@ -31,20 +35,27 @@ function MainApp() {
       }}
     >
       <AppShell />
+      {showTour && <OnboardingTour onComplete={onTourComplete} />}
     </ViewContext>
   );
 }
 
 function App() {
   const [setupDone, setSetupDone] = useState(isSetupComplete);
+  const [tourDone, setTourDone] = useState(isTourComplete);
+
+  if (!setupDone) {
+    return (
+      <>
+        <SetupWizard onComplete={() => setSetupDone(true)} />
+        <Toaster />
+      </>
+    );
+  }
 
   return (
     <>
-      {setupDone ? (
-        <MainApp />
-      ) : (
-        <SetupWizard onComplete={() => setSetupDone(true)} />
-      )}
+      <MainApp showTour={!tourDone} onTourComplete={() => setTourDone(true)} />
       <Toaster />
     </>
   );
