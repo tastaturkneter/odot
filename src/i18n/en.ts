@@ -277,6 +277,28 @@ const en = {
   "notifications.deadlineTitle": "Due",
   "notifications.deadlineBody": "{count} tasks due",
 
+  // Setup wizard
+  "setup.welcome": "Welcome to odot",
+  "setup.welcomeDescription": "Let's get you set up in just a few steps.",
+  "setup.languageStep": "Language",
+  "setup.syncStep": "Sync",
+  "setup.accountStep": "Account",
+  "setup.next": "Next",
+  "setup.back": "Back",
+  "setup.finish": "Get started",
+  "setup.skip": "Skip",
+  "setup.syncTitle": "Sync Server",
+  "setup.syncDescription": "Your data syncs end-to-end encrypted across devices. You can use the default server or enter your own.",
+  "setup.syncUrlPlaceholder": "Leave empty for default server",
+  "setup.accountTitle": "Your Account",
+  "setup.accountDescription": "A recovery phrase has been created for you. Save it to access your data on other devices.",
+  "setup.accountRestore": "Already have an account?",
+  "setup.accountRestoreButton": "Restore from recovery phrase",
+  "setup.accountRestoreDescription": "Enter your 24-word recovery phrase to restore your existing account.",
+  "setup.accountNewDescription": "This is your recovery phrase. Save it somewhere safe — anyone with it can access your data.",
+  "setup.accountCopied": "Copied!",
+  "setup.accountCopy": "Copy to clipboard",
+
   // Confirm dialogs
   "confirm.cancel": "Cancel",
   "confirm.delete": "Delete",

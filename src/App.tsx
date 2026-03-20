@@ -4,8 +4,12 @@ import { AppShell } from "@/components/layout/AppShell";
 import { Toaster } from "@/components/ui/sonner";
 import { useViewRouter } from "@/hooks/useViewRouter";
 import { useNotificationScheduler } from "@/hooks/useNotificationScheduler";
+import {
+  SetupWizard,
+  isSetupComplete,
+} from "@/components/shared/SetupWizard";
 
-function App() {
+function MainApp() {
   const [activeView, setActiveView] = useViewRouter();
   const [newModalOpen, setNewModalOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
@@ -27,8 +31,22 @@ function App() {
       }}
     >
       <AppShell />
-      <Toaster />
     </ViewContext>
+  );
+}
+
+function App() {
+  const [setupDone, setSetupDone] = useState(isSetupComplete);
+
+  return (
+    <>
+      {setupDone ? (
+        <MainApp />
+      ) : (
+        <SetupWizard onComplete={() => setSetupDone(true)} />
+      )}
+      <Toaster />
+    </>
   );
 }
 

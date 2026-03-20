@@ -279,6 +279,28 @@ const de: Translations = {
   "notifications.deadlineTitle": "Fällig",
   "notifications.deadlineBody": "{count} fällige Aufgaben",
 
+  // Setup wizard
+  "setup.welcome": "Willkommen bei odot",
+  "setup.welcomeDescription": "Lass uns dich in wenigen Schritten einrichten.",
+  "setup.languageStep": "Sprache",
+  "setup.syncStep": "Sync",
+  "setup.accountStep": "Konto",
+  "setup.next": "Weiter",
+  "setup.back": "Zurück",
+  "setup.finish": "Los geht's",
+  "setup.skip": "Überspringen",
+  "setup.syncTitle": "Sync-Server",
+  "setup.syncDescription": "Deine Daten werden Ende-zu-Ende-verschlüsselt zwischen Geräten synchronisiert. Du kannst den Standard-Server nutzen oder deinen eigenen angeben.",
+  "setup.syncUrlPlaceholder": "Leer lassen für Standard-Server",
+  "setup.accountTitle": "Dein Konto",
+  "setup.accountDescription": "Eine Wiederherstellungsphrase wurde für dich erstellt. Speichere sie, um auf anderen Geräten auf deine Daten zuzugreifen.",
+  "setup.accountRestore": "Bereits ein Konto?",
+  "setup.accountRestoreButton": "Von Wiederherstellungsphrase wiederherstellen",
+  "setup.accountRestoreDescription": "Gib deine 24-Wort-Wiederherstellungsphrase ein, um dein bestehendes Konto wiederherzustellen.",
+  "setup.accountNewDescription": "Das ist deine Wiederherstellungsphrase. Bewahre sie sicher auf — jeder, der sie hat, kann auf deine Daten zugreifen.",
+  "setup.accountCopied": "Kopiert!",
+  "setup.accountCopy": "In Zwischenablage kopieren",
+
   // Confirm dialogs
   "confirm.cancel": "Abbrechen",
   "confirm.delete": "Löschen",
