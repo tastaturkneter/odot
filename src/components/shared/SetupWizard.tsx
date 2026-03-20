@@ -10,6 +10,7 @@ import { Mnemonic } from "@evolu/common";
 import { Sun, Moon, Monitor } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { seedDemoData } from "@/lib/seedDemoData";
 
 const SETUP_COMPLETE_KEY = "odot-setup-complete";
 
@@ -40,6 +41,7 @@ export function SetupWizard({ onComplete }: SetupWizardProps) {
   const [currentStep, setCurrentStep] = useState(0);
   const [restoreInput, setRestoreInput] = useState("");
   const [restoreError, setRestoreError] = useState<string | null>(null);
+  const [wantsDemoData, setWantsDemoData] = useState(false);
   const step = STEPS[currentStep];
 
   async function handleNext() {
@@ -57,6 +59,10 @@ export function SetupWizard({ onComplete }: SetupWizardProps) {
         markSetupComplete();
         await evolu.restoreAppOwner(result.value);
         return; // restoreAppOwner reloads the app
+      }
+
+      if (wantsDemoData) {
+        seedDemoData(evolu);
       }
 
       markSetupComplete();
@@ -106,6 +112,8 @@ export function SetupWizard({ onComplete }: SetupWizardProps) {
               setRestoreError(null);
             }}
             restoreError={restoreError}
+            wantsDemoData={wantsDemoData}
+            onWantsDemoDataChange={setWantsDemoData}
           />
         )}
 
@@ -300,12 +308,16 @@ interface AccountStepProps {
   restoreInput: string;
   onRestoreInputChange: (value: string) => void;
   restoreError: string | null;
+  wantsDemoData: boolean;
+  onWantsDemoDataChange: (value: boolean) => void;
 }
 
 function AccountStep({
   restoreInput,
   onRestoreInputChange,
   restoreError,
+  wantsDemoData,
+  onWantsDemoDataChange,
 }: AccountStepProps) {
   const t = useTranslation();
   const [mnemonic, setMnemonic] = useState<string | null>(null);
@@ -407,6 +419,22 @@ function AccountStep({
           </p>
         </div>
       )}
+
+      {/* Demo data toggle */}
+      <label className="flex cursor-pointer items-start gap-3 rounded-md border p-3">
+        <input
+          type="checkbox"
+          checked={wantsDemoData}
+          onChange={(e) => onWantsDemoDataChange(e.target.checked)}
+          className="mt-0.5 h-4 w-4 rounded border-input accent-primary"
+        />
+        <div>
+          <p className="text-sm font-medium">{t("setup.demoData")}</p>
+          <p className="text-xs text-muted-foreground">
+            {t("setup.demoDataDescription")}
+          </p>
+        </div>
+      </label>
     </div>
   );
 }

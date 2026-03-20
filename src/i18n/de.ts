@@ -322,6 +322,10 @@ const de: Translations = {
   "tour.settingsDescription": "Passe Sprache, Theme, Datumsformat, Benachrichtigungen und mehr an. Drücke jederzeit ? um alle Tastenkürzel zu sehen.",
   "tour.start": "Los geht's!",
 
+  // Demo data
+  "setup.demoData": "Mit Demodaten füllen",
+  "setup.demoDataDescription": "Beispielprojekte, Tags und Todos hinzufügen, um zu sehen wie die App gefüllt aussieht.",
+
   // Confirm dialogs
   "confirm.cancel": "Abbrechen",
   "confirm.delete": "Löschen",

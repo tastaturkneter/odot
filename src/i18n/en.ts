@@ -320,6 +320,10 @@ const en = {
   "tour.settingsDescription": "Customize language, theme, date format, notifications, and more. Press ? anytime to see all keyboard shortcuts.",
   "tour.start": "Let's go!",
 
+  // Demo data
+  "setup.demoData": "Fill with demo data",
+  "setup.demoDataDescription": "Add sample projects, tags, and todos to see how the app looks when populated.",
+
   // Confirm dialogs
   "confirm.cancel": "Cancel",
   "confirm.delete": "Delete",
