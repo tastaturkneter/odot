@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { ChevronRight, ChevronLeft, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useTranslation } from "@/hooks/useTranslation";
+import type { TranslationKeys } from "@/i18n/en";
 import { useActiveView } from "@/hooks/useActiveView";
 import { Button } from "@/components/ui/button";
 
@@ -25,8 +26,8 @@ function markTourComplete(): void {
 
 interface TourStep {
   target: string;
-  titleKey: string;
-  descriptionKey: string;
+  titleKey: TranslationKeys;
+  descriptionKey: TranslationKeys;
   position?: "top" | "bottom" | "left" | "right";
   onEnter?: () => void;
   onLeave?: () => void;
