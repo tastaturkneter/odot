@@ -11,7 +11,7 @@ function applyTheme(theme: Theme) {
 
   document.documentElement.classList.toggle("dark", isDark);
   // Keep localStorage in sync for the flash-prevention script in index.html
-  localStorage.setItem("theme", theme === "system" ? "" : theme);
+  localStorage.setItem("odot-theme", theme === "system" ? "" : theme);
 }
 
 export function useTheme() {
