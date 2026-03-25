@@ -8,6 +8,16 @@ import { getPermission, showNotification } from "@/lib/notifications";
 
 const STORAGE_KEY = "odot-last-notification-ts";
 
+function setAppBadge(count: number) {
+  if ("setAppBadge" in navigator) {
+    if (count > 0) {
+      navigator.setAppBadge(count).catch(() => {});
+    } else {
+      navigator.clearAppBadge?.().catch(() => {});
+    }
+  }
+}
+
 export function useNotificationScheduler() {
   const { get } = useSettings();
   const todos = useQuery(allTodos);
@@ -16,6 +26,17 @@ export function useNotificationScheduler() {
   const enabled = get("notificationsEnabled") === "1";
   const notificationTime = get("notificationTime") ?? "09:00";
   const frequencyH = Number(get("notificationFrequency") ?? "24");
+
+  // Update app badge whenever todos change
+  useEffect(() => {
+    const today = todayStr();
+    const activeTodos = todos.filter((todo) => !todo.isCompleted);
+    const dueCount = new Set([
+      ...activeTodos.filter((todo) => todo.whenDate && todo.whenDate <= today).map((t) => t.id),
+      ...activeTodos.filter((todo) => todo.deadline && todo.deadline <= today).map((t) => t.id),
+    ]).size;
+    setAppBadge(dueCount);
+  }, [todos]);
 
   useEffect(() => {
     if (!enabled) return;
