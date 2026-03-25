@@ -85,11 +85,17 @@ export function PickerDropdown({
     if (!el) return;
     const pad = 8;
 
+    // Find the scrollable dialog container (if any) for bounds calculation
+    const scrollParent = el.closest('[data-slot="dialog-content"]');
+    const containerRect = scrollParent?.getBoundingClientRect();
+
     // Measure available space from the parent trigger wrapper
     const anchor = el.parentElement?.getBoundingClientRect();
     if (anchor) {
-      const spaceBelow = window.innerHeight - anchor.bottom - pad;
-      const spaceAbove = anchor.top - pad;
+      const bottomBound = containerRect ? containerRect.bottom : window.innerHeight;
+      const topBound = containerRect ? containerRect.top : 0;
+      const spaceBelow = bottomBound - anchor.bottom - pad;
+      const spaceAbove = anchor.top - topBound - pad;
       if (spaceAbove > spaceBelow) {
         setFlipUp(true);
         setMaxH(spaceAbove);
@@ -105,10 +111,12 @@ export function PickerDropdown({
       if (!dropdown?.parentElement) return;
       const parentLeft = dropdown.parentElement.getBoundingClientRect().left;
       const right = parentLeft + dropdown.offsetWidth;
-      if (right > window.innerWidth - pad) {
-        setShiftX(-(right - window.innerWidth + pad));
-      } else if (parentLeft < pad) {
-        setShiftX(pad - parentLeft);
+      const rightBound = containerRect ? containerRect.right : window.innerWidth;
+      const leftBound = containerRect ? containerRect.left : 0;
+      if (right > rightBound - pad) {
+        setShiftX(-(right - rightBound + pad));
+      } else if (parentLeft < leftBound + pad) {
+        setShiftX(leftBound + pad - parentLeft);
       } else {
         setShiftX(0);
       }
@@ -117,6 +125,14 @@ export function PickerDropdown({
     updateShiftX();
     const observer = new ResizeObserver(updateShiftX);
     observer.observe(el);
+
+    // Scroll the dialog so the dropdown is fully visible
+    if (scrollParent) {
+      requestAnimationFrame(() => {
+        el.scrollIntoView({ block: "nearest", behavior: "smooth" });
+      });
+    }
+
     return () => observer.disconnect();
   }, [open]);
 

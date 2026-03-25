@@ -202,7 +202,7 @@ export function NewTodoModal({
             placeholder={t("newTodo.notesPlaceholder")}
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
-            className="min-h-[3rem] resize-none text-sm"
+            className="min-h-[3rem] max-h-[30vh] resize-none text-sm overflow-y-auto"
           />
 
           {/* Picker pills */}
