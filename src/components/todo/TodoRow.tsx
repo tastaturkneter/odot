@@ -183,7 +183,7 @@ export function TodoRow({
       <button
         ref={dragHandleRef}
         {...(dragListeners as React.HTMLAttributes<HTMLButtonElement>)}
-        className="absolute -left-5 top-2.5 cursor-grab touch-none text-muted-foreground/40 opacity-40 md:opacity-0 transition-opacity md:group-hover:opacity-100 active:cursor-grabbing"
+        className="absolute -left-5 top-2.5 cursor-grab touch-none text-muted-foreground/40 dark:text-muted-foreground/70 opacity-40 dark:opacity-60 md:opacity-0 transition-opacity md:group-hover:opacity-100 active:cursor-grabbing"
         tabIndex={-1}
         aria-label={t("todo.dragToReorder")}
       >
